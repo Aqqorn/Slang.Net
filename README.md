@@ -219,7 +219,7 @@ foreach (var target in allTargets)
 }
 ```
 
-Multiple pipline stages? Use multiple sessions.
+Multi-stage pipeline? Use multiple sessions.
 ```csharp
 // This is required to enable Slang's GLSL support, since it defaults to Vulkan
 Session.GlslEnabled = true;
@@ -329,7 +329,7 @@ var module = fileBuilder.Create();
     using Slang.Sdk.Interop;
 
     // Get the shader reflection for the specified target
-    ShaderReflection reflection = module.Program.Targets[Targets.Hlsl.cs_5_0]GetReflection();
+    ShaderReflection reflection = module.Program.Targets[Targets.Hlsl.cs_5_0].GetReflection();
 
     // Get the shader reflection for the specified target
     var parameters = reflection.Parameters;
