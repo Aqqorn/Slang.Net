@@ -87,11 +87,11 @@ namespace SlangCube
             }
             else if (key == Key.R)
             {
-                throw new NotImplementedException();
+                //throw new NotImplementedException();
             }
             else if (key == Key.B)
             {
-                throw new NotImplementedException();
+                //throw new NotImplementedException();
             }
         }
     }

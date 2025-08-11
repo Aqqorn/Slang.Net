@@ -121,8 +121,7 @@ namespace SlangNative
 
 		try
 		{
-			auto result = ((SessionCLI*)session)->getModuleByIndex(index);
-			return result.release();
+			return ((SessionCLI*)session)->getModuleByIndex(index);
 		}
 		catch (const std::exception& e)
 		{
@@ -569,8 +568,7 @@ namespace SlangNative
 
 		try
 		{
-			auto result = ((ModuleCLI*)parent_module)->getEntryPointByIndex(index);
-			return result.release();
+			return ((ModuleCLI*)parent_module)->getEntryPointByIndex(index);
 		}
 		catch (const std::exception& e)
 		{
@@ -595,8 +593,7 @@ namespace SlangNative
 
 		try
 		{
-			auto result = ((ModuleCLI*)parent_module)->findEntryPointByName(entryPointName);
-			return result.release();
+			return ((ModuleCLI*)parent_module)->findEntryPointByName(entryPointName);
 		}
 		catch (const std::exception& e)
 		{

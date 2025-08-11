@@ -17,9 +17,8 @@ Native::ModuleCLI::ModuleCLI(SessionCLI* parent, CompileRequestCLI* compileReque
 	m_parent = parent->getNative();
 	unsigned int moduleIndex = parent->getModuleCount();
 	
-	// Take ownership of the compile request
-	auto ownedCompileRequest = std::unique_ptr<CompileRequestCLI>(compileRequest);
-	initializeFromCompileRequest(parent, std::move(ownedCompileRequest), moduleIndex);
+	initializeFromCompileRequest(parent, compileRequest, moduleIndex);
+	compileRequest->getNative()->getProgramWithEntryPoints(m_programComponent.writeRef());
 }
 
 Native::ModuleCLI::ModuleCLI(SessionCLI* parent, const char* moduleName, const char* modulePath, const char* shaderSource)
@@ -37,13 +36,14 @@ Native::ModuleCLI::ModuleCLI(SessionCLI* parent, const char* moduleName, const c
 	unsigned int moduleIndex = parent->getModuleCount();
 
 	// Create compile request
-	auto compileRequest = std::make_unique<CompileRequestCLI>(parent);
+	auto compileRequest = new CompileRequestCLI(parent);
 	
 	// Add the shader file
 	compileRequest->addTranslationUnit(SLANG_SOURCE_LANGUAGE_SLANG, moduleName);
 	compileRequest->addTranslationUnitSourceFile(moduleIndex, modulePath);
 
-	initializeFromCompileRequest(parent, std::move(compileRequest), moduleIndex);
+	initializeFromCompileRequest(parent, compileRequest, moduleIndex);
+	compileRequest->getNative()->getProgramWithEntryPoints(m_programComponent.writeRef());
 }
 
 Native::ModuleCLI::ModuleCLI(SessionCLI* parent, const char* moduleName)
@@ -97,35 +97,30 @@ Native::ModuleCLI::ModuleCLI(const ModuleCLI& other)
 
 Native::ModuleCLI::~ModuleCLI()
 {
-	// Clear all cached objects first
-	m_compileRequest.reset();
-	
 	// ComPtr will automatically release Slang interfaces
 }
 
-void Native::ModuleCLI::initializeFromCompileRequest(SessionCLI* parent, std::unique_ptr<CompileRequestCLI> compileRequest, unsigned int moduleIndex)
+void Native::ModuleCLI::initializeFromCompileRequest(SessionCLI* parent, CompileRequestCLI* compileRequest, unsigned int moduleIndex)
 {
-	m_compileRequest = std::move(compileRequest);
-
 	// Compile the module
-	if (m_compileRequest->getNative()->compile() != SLANG_OK)
+	if (compileRequest->getNative()->compile() != SLANG_OK)
 	{
-		auto diagnostics = m_compileRequest->getNative()->getDiagnosticOutput();
+		auto diagnostics = compileRequest->getNative()->getDiagnosticOutput();
 		throw std::runtime_error(std::string("Slang compile error:\n") + (diagnostics ? diagnostics : "Unknown error"));
 	}
 
 	// Get the compiled module
 	Slang::ComPtr<slang::IModule> slangModule;
-	SlangResult result = m_compileRequest->getNative()->getModule(moduleIndex, slangModule.writeRef());
+	SlangResult result = compileRequest->getNative()->getModule(moduleIndex, slangModule.writeRef());
 	
 	if (SLANG_FAILED(result) || !slangModule)
 	{
-		auto diagnostics = m_compileRequest->getNative()->getDiagnosticOutput();
+		auto diagnostics = compileRequest->getNative()->getDiagnosticOutput();
 		throw std::runtime_error("Failed to retrieve compiled module: " + std::string(diagnostics ? diagnostics : "Unknown error"));
 	}
 
 	// Handle any diagnostics
-	auto diagnostics = m_compileRequest->getNative()->getDiagnosticOutput();
+	auto diagnostics = compileRequest->getNative()->getDiagnosticOutput();
 	if (diagnostics && strlen(diagnostics) > 0)
 	{
 		std::cout << "Module compilation diagnostics:\n" << diagnostics << std::endl;
@@ -143,18 +138,7 @@ const char* Native::ModuleCLI::getName()
 
 slang::IComponentType* Native::ModuleCLI::getProgramComponent()
 {
-	if (!m_compileRequest)
-		throw std::runtime_error("Cannot get program component: module was not created from a compile request");
-
-	slang::IComponentType* result;
-	SlangResult getResult = m_compileRequest->getNative()->getProgramWithEntryPoints(&result);
-
-	if (SLANG_FAILED(getResult))
-	{
-		throw std::runtime_error("Failed to retrieve program component. Error code: " + std::to_string(getResult));
-	}
-
-	return result;
+	return m_programComponent;
 }
 
 unsigned int Native::ModuleCLI::getEntryPointCount()
@@ -164,16 +148,14 @@ unsigned int Native::ModuleCLI::getEntryPointCount()
 	return m_slangModule->getDefinedEntryPointCount();
 }
 
-std::unique_ptr<Native::EntryPointCLI> Native::ModuleCLI::getEntryPointByIndex(unsigned index)
+Native::EntryPointCLI* Native::ModuleCLI::getEntryPointByIndex(unsigned index)
 {
-	std::unique_ptr<EntryPointCLI> result = std::unique_ptr<EntryPointCLI>(new EntryPointCLI(this, index));
-	return result;
+	return new EntryPointCLI(this, index);
 }
 
-std::unique_ptr<Native::EntryPointCLI> Native::ModuleCLI::findEntryPointByName(const char* name)
+Native::EntryPointCLI* Native::ModuleCLI::findEntryPointByName(const char* name)
 {
-	std::unique_ptr<EntryPointCLI> result = std::unique_ptr<EntryPointCLI>(new EntryPointCLI(this, name));
-	return result;
+	return new EntryPointCLI(this, name);
 }
 
 Slang::ComPtr<slang::ISession> Native::ModuleCLI::getParent()

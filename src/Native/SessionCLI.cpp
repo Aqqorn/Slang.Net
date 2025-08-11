@@ -137,9 +137,9 @@ unsigned int Native::SessionCLI::getModuleCount()
     return m_session->getLoadedModuleCount();
 }
 
-std::unique_ptr<Native::ModuleCLI> Native::SessionCLI::getModuleByIndex(unsigned index)
+Native::ModuleCLI* Native::SessionCLI::getModuleByIndex(unsigned index)
 {
-    return std::unique_ptr<Native::ModuleCLI>(new Native::ModuleCLI(this, m_session->getLoadedModule(index)));
+    return new Native::ModuleCLI(this, m_session->getLoadedModule(index));
 }
 
 Slang::ComPtr<slang::ISession> Native::SessionCLI::getNative()

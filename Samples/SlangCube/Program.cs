@@ -56,7 +56,7 @@ namespace SlangCube
             {
                 var options = WindowOptions.Default;
                 options.Size = new Vector2D<int>(800, 600);
-                options.Title = $"Slang.Net Demo - (Press B to switch)";
+                options.Title = $"Slang.Net Demo - (Press Alt+F4 to exit)";
                 options.API = selectedBackend switch
                 {
                     GraphicsBackend.OpenGL => GraphicsAPI.Default,

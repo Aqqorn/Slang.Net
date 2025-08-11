@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SlangCube": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

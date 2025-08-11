@@ -36,7 +36,7 @@ namespace Native
 
 		// Module management
 		unsigned int getModuleCount();
-		std::unique_ptr<ModuleCLI> getModuleByIndex(unsigned index);
+		ModuleCLI* getModuleByIndex(unsigned index);
 
 		// Static members
 		static Slang::ComPtr<slang::IGlobalSession> s_context;

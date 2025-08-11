@@ -54,19 +54,19 @@ namespace Native
 		
 		// Entry points
 		unsigned int getEntryPointCount();
-		std::unique_ptr<EntryPointCLI> getEntryPointByIndex(unsigned index);
-		std::unique_ptr<EntryPointCLI> findEntryPointByName(const char* name);
+		EntryPointCLI* getEntryPointByIndex(unsigned index);
+		EntryPointCLI* findEntryPointByName(const char* name);
 
 		// Program access
 		std::unique_ptr<ProgramCLI> getProgram();
 
 	private:
-		void initializeFromCompileRequest(SessionCLI* parent, std::unique_ptr<CompileRequestCLI> compileRequest, unsigned int moduleIndex);
+		void initializeFromCompileRequest(SessionCLI* parent, CompileRequestCLI* compileRequest, unsigned int moduleIndex);
 
 		// parent should not be a ComPtr here, should be SessionCLI* instead
 		Slang::ComPtr<slang::ISession> m_parent;
 		Slang::ComPtr<slang::IModule> m_slangModule;
-		std::unique_ptr<CompileRequestCLI> m_compileRequest;
+		Slang::ComPtr<slang::IComponentType> m_programComponent;
 	};
 }
 
