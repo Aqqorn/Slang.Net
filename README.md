@@ -1,12 +1,12 @@
 # Slang.Sdk
-**New** Updated to recent slang version: **2025.13.2**
+**[New]** Updated to recent slang version: **2025.13.2**
 
 A comprehensive .NET wrapper for the Slang Shader Language Sdk, providing seamless integration of shader compilation and reflection capabilities into .NET applications.
 
 Slang.Sdk Includes the following:
--**Compilation API**
--**Reflection API**
--**NEW: 'slangc' CLI API**
+- **Compilation API**
+- **Reflection API**
+- **[NEW] 'slangc' CLI API**
 
 > **Update:** Release roadmap is now live (please see below). This provides info on releases until v1.0.0.
 
