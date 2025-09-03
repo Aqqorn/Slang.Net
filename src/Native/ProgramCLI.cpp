@@ -21,17 +21,12 @@ Native::ProgramCLI::ProgramCLI(ModuleCLI* parent)
 {
 	if (!parent)
 		throw std::invalid_argument("Parent module cannot be null");
-
-	m_composedProgram = parent->getProgramComponent();
-	if (!m_composedProgram)
-		throw std::runtime_error("Failed to get program component from module");
 }
 
 Native::ProgramCLI::ProgramCLI(const ProgramCLI& other)
 {
 	// Copy constructor for caching support
 	m_parent = other.m_parent;
-	m_composedProgram = other.m_composedProgram;
 }
 
 Native::ProgramCLI::~ProgramCLI()
@@ -47,13 +42,13 @@ SlangResult Native::ProgramCLI::GetCompiled(unsigned int targetIndex, const void
 	if (!outputSize)
 		throw std::invalid_argument("Output size pointer cannot be null");
 
-	if (!m_composedProgram)
+	if (!m_parent->getProgramComponent())
 		throw std::runtime_error("Program is not initialized");
 
 	Slang::ComPtr<slang::IBlob> targetCode;
 	Slang::ComPtr<slang::IBlob> diagnosticsBlob;
 	
-	SlangResult result = m_composedProgram->getTargetCode(
+	SlangResult result = m_parent->getProgramComponent()->getTargetCode(
 		targetIndex, 
 		targetCode.writeRef(), 
 		diagnosticsBlob.writeRef());
@@ -97,13 +92,13 @@ SlangResult Native::ProgramCLI::GetCompiled(unsigned int entryPointIndex, unsign
 	if (!outputSize)
 		throw std::invalid_argument("Output size pointer cannot be null");
 
-	if (!m_composedProgram)
+	if (!m_parent->getProgramComponent())
 		throw std::runtime_error("Program is not initialized");
 
 	Slang::ComPtr<slang::IBlob> targetCode;
 	Slang::ComPtr<slang::IBlob> diagnosticsBlob;
 	
-	SlangResult result = m_composedProgram->getEntryPointCode(
+	SlangResult result = m_parent->getProgramComponent()->getEntryPointCode(
 		entryPointIndex,
 		targetIndex,
 		targetCode.writeRef(),
@@ -145,11 +140,11 @@ SlangResult Native::ProgramCLI::GetCompiled(unsigned int entryPointIndex, unsign
 
 slang::ProgramLayout* Native::ProgramCLI::GetLayout(int targetIndex)
 {
-	if (!m_composedProgram)
+	if (!m_parent->getProgramComponent())
 		throw std::runtime_error("Program is not initialized");
 
 	Slang::ComPtr<slang::IBlob> diagnosticsBlob;
-	slang::ProgramLayout* result = m_composedProgram->getLayout(targetIndex, diagnosticsBlob.writeRef());
+	slang::ProgramLayout* result = m_parent->getProgramComponent()->getLayout(targetIndex, diagnosticsBlob.writeRef());
 
 	// Handle diagnostics
 	if (diagnosticsBlob && diagnosticsBlob->getBufferSize() > 0)
@@ -176,7 +171,7 @@ slang::ProgramLayout* Native::ProgramCLI::GetLayout(int targetIndex)
 
 slang::IComponentType* Native::ProgramCLI::getNative()
 {
-	return m_composedProgram;
+	return m_parent->getProgramComponent();
 }
 
 Native::ModuleCLI* Native::ProgramCLI::getParent()

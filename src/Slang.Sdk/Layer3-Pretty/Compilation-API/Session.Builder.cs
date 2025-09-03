@@ -14,27 +14,6 @@ namespace Slang.Sdk
     {
         public class Builder
         {
-            #region Check and Prepare Spirv
-            private static object _InitializeSpirvLock = new object();
-            private static bool _IsSpirvInitialized = false;
-            static void CheckAndPrepareSpirv(Target target)
-            {
-                Debug.Assert(target.target == Target.CompileTarget.SpirV, "This method should only be called for SpirV targets.");
-
-                if (!SpirvTools.IsInstalled)
-                    throw new Exception("The SpirV tools is not installed. It must be installed in order to add a SpirV target. You can get it from the Vulkan Sdk. Download it here: https://www.lunarg.com/vulkan-sdk/");
-
-                lock (_InitializeSpirvLock)
-                {
-                    if (!_IsSpirvInitialized)
-                    {
-                        SpirvTools.CopyTools();
-                        _IsSpirvInitialized = true;
-                    }
-                }
-            } 
-            #endregion
-
             public List<CompilerOption> CompilerOptions { get; } = new();
             public List<PreprocessorMacro> PreprocessorMacros { get; } = new();
             public List<Target> Targets { get; } = new();

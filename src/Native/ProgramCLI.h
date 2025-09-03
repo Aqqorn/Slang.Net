@@ -57,7 +57,6 @@ namespace Native
 
 	private:
 		ModuleCLI* m_parent;
-		Slang::ComPtr<slang::IComponentType> m_composedProgram;
 		
 		// Helper method for getting program components (deprecated)
 		slang::IComponentType** getProgramComponents();

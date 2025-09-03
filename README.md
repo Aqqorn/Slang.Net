@@ -114,7 +114,7 @@ dotnet add package Slang.Sdk
 Or add to your project file:
 
 ```xml
-<PackageReference Include="Slang.Sdk" Version="0.5.1" />
+<PackageReference Include="Slang.Sdk" Version="0.5.2" />
 ```
 
 ## slangc CLI Invocation
@@ -320,7 +320,7 @@ var module = fileBuilder.Create();
 
 - Need to programmatically bind shader parameters? No problem, just use the Reflection API.
 
-> **Note** As of v0.5.1, all slang reflection types (with the exception of DeclReflection and a few other minor things) has been elegantly abstracted
+> **Note** As of v0.5.2, all slang reflection types (with the exception of DeclReflection and a few other minor things) has been elegantly abstracted
 
 - Reflection Example
 

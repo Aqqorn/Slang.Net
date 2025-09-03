@@ -35,7 +35,7 @@ internal static unsafe partial class SlangNativeInterop
             return IntPtr.Zero;
         }
 
-        // Register a custom DLL resolver to look in the runtime-specific directory
+        // Register a custom DL resolver to look in the runtime-specific directory
         // This is required for testing Slang.Sdk as an executable
         NativeLibrary.SetDllImportResolver(typeof(SlangNativeInterop).Assembly, DllImportResolver);
     }
@@ -75,6 +75,10 @@ internal static unsafe partial class SlangNativeInterop
     #region Free char**
     [LibraryImport(LibraryName)]
     internal static partial void FreeChar(char** c);
+    
+    // New: Free generic pointer allocated by native using malloc
+    [LibraryImport(LibraryName)]
+    internal static partial void FreePointer(void** p);
     #endregion
 
     #region Global Session API
@@ -692,7 +696,7 @@ internal static unsafe partial class SlangNativeInterop
     internal static partial char* VariableLayoutReflection_GetSemanticName(nint variableLayoutReflection, char** error);
 
     [LibraryImport(LibraryName)]
-    internal static partial nuint VariableLayoutReflection_GetSemanticIndex(nint variableLayoutReflection, char** error);
+    internal static partial uint VariableLayoutReflection_GetSemanticIndex(nint variableLayoutReflection, char** error);
 
     [LibraryImport(LibraryName)]
     internal static partial uint VariableLayoutReflection_GetStage(nint variableLayoutReflection, char** error);

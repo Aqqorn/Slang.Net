@@ -45,8 +45,8 @@ namespace Slang.Sdk
         public uint BindingSpace => Binding.GetBindingSpace();
         public int ImageFormat => Binding.GetImageFormat();
         public string? SemanticName => Binding.GetSemanticName();
-        public nuint SemanticIndex => Binding.GetSemanticIndex();
-        public uint Stage => Binding.GetStage();
+        public uint SemanticIndex => Binding.GetSemanticIndex();
+        public Stage Stage => Binding.GetStage();
 
         public Variable? Variable => 
             Binding.GetVariable() is { } variable ? new Variable(this, variable) : null;

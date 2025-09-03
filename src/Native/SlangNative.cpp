@@ -27,8 +27,23 @@ namespace SlangNative
 	// Helper function to set error message safely
 	static const char* SetError(const std::string& errorMessage)
 	{
+		// Store last error for debugging purposes
 		g_lastError = errorMessage;
-		return g_lastError.c_str();
+
+		// Allocate a heap copy that the managed side can free via FreeChar/FreePointer
+		const size_t len = errorMessage.size();
+		char* buffer = (char*)std::malloc(len + 1);
+		if (!buffer)
+		{
+			return nullptr; // out of memory, caller will see null
+		}
+		#ifdef _MSC_VER
+			strcpy_s(buffer, len + 1, errorMessage.c_str());
+		#else
+			std::memcpy(buffer, errorMessage.c_str(), len);
+			buffer[len] = '\0';
+		#endif
+		return buffer;
 	}
 	
 	extern "C" SLANGNATIVE_API const char* SlangNative_GetLastError()
@@ -38,8 +53,15 @@ namespace SlangNative
 
 	extern "C" SLANGNATIVE_API void FreeChar(char** c)
 	{
-		free(*c);
+		std::free(*c);
 		*c = nullptr;
+	}
+
+	// New: generic pointer free for buffers allocated with malloc
+	extern "C" SLANGNATIVE_API void FreePointer(void** p)
+	{
+		std::free(*p);
+		*p = nullptr;
 	}
 
 	// Global Session
@@ -462,12 +484,12 @@ namespace SlangNative
 	{
 		if (!parentSession)
 		{
-			SetError("Argument Null: parentSession");
+			*error = SetError("Argument Null: parentSession");
 			return nullptr;
 		}
 		if (!compileRequest)
 		{
-			SetError("Argument Null: compileRequest");
+			*error = SetError("Argument Null: compileRequest");
 			return nullptr;
 		}
 		try
@@ -710,12 +732,27 @@ namespace SlangNative
 			EntryPointCLI* asEntryPoint = ((EntryPointCLI*)entryPoint);
 			ModuleCLI* parent = asEntryPoint->getParent();
 			ProgramCLI* program = new ProgramCLI(parent);
+			// Get compiled code (pointer valid only while blob is alive)
 			program->GetCompiled(asEntryPoint->getIndex(), targetIndex, output, outputSize);
+			// Make a durable heap copy because the blob will be released when program is deleted
+			if (output && *output && outputSize && *outputSize > 0)
+			{
+				void* copy = std::malloc(static_cast<size_t>(*outputSize));
+				if (!copy)
+				{
+					delete program;
+					*error = SetError("Out of memory while copying compiled entry point output.");
+					return SLANG_FAIL;
+				}
+				std::memcpy(copy, *output, static_cast<size_t>(*outputSize));
+				*output = copy;
+			}
 			delete program;
 
 			//Try this in a later update
 			//this doesn't work for some reason, maybe because not linked or something
 			//return ((EntryPointCLI*)entryPoint)->Compile(targetIndex, output);
+			return SLANG_OK;
 		}
 		catch (const std::exception& e)
 		{
@@ -776,7 +813,20 @@ namespace SlangNative
 	{
 		try
 		{
-			return ((ProgramCLI*)program)->GetCompiled(targetIndex, output, outputSize);
+			SlangResult res = ((ProgramCLI*)program)->GetCompiled(targetIndex, output, outputSize);
+			// Make a durable heap copy because the blob will be released when returning
+			if (output && *output && outputSize && *outputSize > 0)
+			{
+				void* copy = std::malloc(static_cast<size_t>(*outputSize));
+				if (!copy)
+				{
+					*error = SetError("Out of memory while copying compiled target output.");
+					return SLANG_FAIL;
+				}
+				std::memcpy(copy, *output, static_cast<size_t>(*outputSize));
+				*output = copy;
+			}
+			return res;
 		}
 		catch (const std::exception& e)
 		{
@@ -789,7 +839,20 @@ namespace SlangNative
 	{
 		try
 		{
-			return ((ProgramCLI*)program)->GetCompiled(entryPointIndex, targetIndex, output, outputSize);
+			SlangResult res = ((ProgramCLI*)program)->GetCompiled(entryPointIndex, targetIndex, output, outputSize);
+			// Make a durable heap copy because the blob will be released when returning
+			if (output && *output && outputSize && *outputSize > 0)
+			{
+				void* copy = std::malloc(static_cast<size_t>(*outputSize));
+				if (!copy)
+				{
+					*error = SetError("Out of memory while copying compiled entry point output.");
+					return SLANG_FAIL;
+				}
+				std::memcpy(copy, *output, static_cast<size_t>(*outputSize));
+				*output = copy;
+			}
+			return res;
 		}
 		catch (const std::exception& e)
 		{

@@ -208,10 +208,10 @@ namespace Slang.Sdk.Interop
             /// <summary>
             /// Gets the semantic index.
             /// </summary>
-            internal static nuint GetSemanticIndex(VariableLayoutReflectionHandle variableLayoutReflection, out string? error)
+            internal static uint GetSemanticIndex(VariableLayoutReflectionHandle variableLayoutReflection, out string? error)
             {
                 char* pError = null;
-                nuint result = SlangNativeInterop.VariableLayoutReflection_GetSemanticIndex(variableLayoutReflection, &pError);
+                uint result = SlangNativeInterop.VariableLayoutReflection_GetSemanticIndex(variableLayoutReflection, &pError);
                 error = Utf8StringMarshaller.ConvertToManaged((byte*)pError);
                 SlangNativeInterop.FreeChar(&pError);
                 return result;
@@ -220,13 +220,13 @@ namespace Slang.Sdk.Interop
             /// <summary>
             /// Gets the stage.
             /// </summary>
-            internal static uint GetStage(VariableLayoutReflectionHandle variableLayoutReflection, out string? error)
+            internal static Stage GetStage(VariableLayoutReflectionHandle variableLayoutReflection, out string? error)
             {
                 char* pError = null;
                 uint result = SlangNativeInterop.VariableLayoutReflection_GetStage(variableLayoutReflection, &pError);
                 error = Utf8StringMarshaller.ConvertToManaged((byte*)pError);
                 SlangNativeInterop.FreeChar(&pError);
-                return result;
+                return (Stage)result;
             }
 
             /// <summary>

@@ -16,7 +16,7 @@ internal class PrettyTests
             .AddCompilerOption(CompilerOption.Name.WarningsAsErrors, new CompilerOption.Value(CompilerOption.Value.Kind.Int, 0, 0, "all", null))
             .AddCompilerOption(CompilerOption.Name.Obfuscate, new CompilerOption.Value(CompilerOption.Value.Kind.Int, 1, 0, null, null))
             .AddPreprocessorMacro("LIGHTING_SCALER", "12")
-            .AddTarget(Targets.Hlsl.cs_5_0)
+            .AddTarget(Targets.Custom(Target.CompileTarget.Dxil, "sm_6_0"))
             .AddSearchPath($@"{AppDomain.CurrentDomain.BaseDirectory}Tests\Shaders\"); // Fixed: AverageColor.slang is copied to output directory root
 
         // Create the session
@@ -29,12 +29,21 @@ internal class PrettyTests
         Program program = module.Program;
 
         // Access the shader program from the module
-        ShaderReflection reflection = module.Program.Targets[Targets.Hlsl.cs_5_0].GetReflection();
+        ShaderReflection reflection = module.Program.Targets[Targets.Custom(Target.CompileTarget.Dxil, "sm_6_0")].GetReflection();
 
         // Compile the shader program
-        var compileResult = program.Targets[Targets.Hlsl.cs_5_0].Compile();
+        var compileResult = program.Targets[Targets.Custom(Target.CompileTarget.Dxil, "sm_6_0")].Compile();
 
         // Print the generated source code length
-        Console.WriteLine(compileResult.SourceCode);
+        switch (compileResult.CompileOutputType)
+        {
+            case Target.CompileOutputType.SourceCode:
+                Console.WriteLine($"Source code length: {compileResult.SourceCode!.Length}");
+                break;
+            case Target.CompileOutputType.ByteCode:
+                Console.WriteLine($"Bytecode length: {compileResult.ByteCode!.Length}");
+                Console.WriteLine($"Bytecode Preview: {BitConverter.ToString(compileResult.ByteCode.Take(32).ToArray()).Replace("-", " ")}");
+                break;
+        }
     }
 }

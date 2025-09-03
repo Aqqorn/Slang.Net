@@ -9,6 +9,8 @@ namespace Slang.Sdk.Binding;
 /// </summary>
 internal unsafe sealed class Session : CompilationBinding, IDisposable
 {
+    static object _lock = new object();
+
     internal override SessionHandle Handle { get; }
     internal override SessionHandle NativeHandle => new(StrongInterop.Session.GetNative(Handle, out var _));
 
@@ -23,6 +25,20 @@ internal unsafe sealed class Session : CompilationBinding, IDisposable
     /// <exception cref="SlangException">Thrown if session creation fails.</exception>
     internal Session(CompilerOption[] options, PreprocessorMacro[] macros, Target[] models, string[] searchPaths)
     {
+        // Checks is there any DXIL target, if so, find and load dxil.dll
+        if (models.Where(item => item.target == Target.CompileTarget.Dxil).Any())
+        {
+            lock(_lock)
+            {
+                if (!DXC_Tools.TryLoad())
+                    throw new SlangException(
+                        SlangResult.Fail,
+                         "DirectXShaderCompiler is not installed: \n" +
+                                "1. Please download and install it from here: https://github.com/microsoft/DirectXShaderCompiler/releases\n" +
+                                "2. Make sure the installation path (...\\dxc<version>.zip\\bin\\<architecture>\\) is added to your system's PATH environment variable.");
+            }
+        }
+
         Targets = models;
         SearchPaths = searchPaths;
 

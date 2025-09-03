@@ -36,14 +36,14 @@ Native::ModuleCLI::ModuleCLI(SessionCLI* parent, const char* moduleName, const c
 	unsigned int moduleIndex = parent->getModuleCount();
 
 	// Create compile request
-	auto compileRequest = new CompileRequestCLI(parent);
+	auto compileRequest = CompileRequestCLI(parent);
 	
 	// Add the shader file
-	compileRequest->addTranslationUnit(SLANG_SOURCE_LANGUAGE_SLANG, moduleName);
-	compileRequest->addTranslationUnitSourceFile(moduleIndex, modulePath);
+	compileRequest.addTranslationUnit(SLANG_SOURCE_LANGUAGE_SLANG, moduleName);
+	compileRequest.addTranslationUnitSourceFile(moduleIndex, modulePath);
 
-	initializeFromCompileRequest(parent, compileRequest, moduleIndex);
-	compileRequest->getNative()->getProgramWithEntryPoints(m_programComponent.writeRef());
+	initializeFromCompileRequest(parent, &compileRequest, moduleIndex);
+	compileRequest.getNative()->getProgramWithEntryPoints(m_programComponent.writeRef());
 }
 
 Native::ModuleCLI::ModuleCLI(SessionCLI* parent, const char* moduleName)
@@ -73,6 +73,7 @@ Native::ModuleCLI::ModuleCLI(SessionCLI* parent, const char* moduleName)
 	{
 		throw std::runtime_error("Failed to load module '" + std::string(moduleName) + "'. No diagnostics available.");
 	}
+	// TODO: programComponent
 }
 
 Native::ModuleCLI::ModuleCLI(SessionCLI* parent, slang::IModule* nativeModule)
@@ -84,6 +85,7 @@ Native::ModuleCLI::ModuleCLI(SessionCLI* parent, slang::IModule* nativeModule)
 
 	m_parent = parent->getNative();
 	m_slangModule = nativeModule;
+	// TODO: programComponent
 }
 
 Native::ModuleCLI::ModuleCLI(const ModuleCLI& other)

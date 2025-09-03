@@ -146,25 +146,26 @@ public enum ParameterCategory
 /// <summary>
 /// Scalar types.
 /// </summary>
+
 public enum ScalarType
 {
     None,
     Void,
     Bool,
-    Int8,
-    Int16,
     Int32,
-    Int64,
-    UInt8,
-    UInt16,
     UInt32,
+    Int64,
     UInt64,
     Float16,
     Float32,
     Float64,
+    Int8,
+    UInt8,
+    Int16,
+    UInt16,
     IntPtr,
     UIntPtr
-}
+};
 
 public enum CapabilityID
 {
@@ -563,26 +564,60 @@ public enum TypeKind
 {
     None,
     Struct,
-    Basic,
-    Vector,
-    Matrix,
     Array,
-    GenericTypeParameter,
-    Interface,
+    Matrix,
+    Vector,
+    Scalar,
     ConstantBuffer,
     Resource,
     SamplerState,
     TextureBuffer,
     ShaderStorageBuffer,
     ParameterBlock,
-    GenericDeclRef,
-    Pointer,
-    NativePtr,
-    NativeRef,
-    Dynamic,
+    GenericTypeParameter,
+    Interface,
+    OutputStream,
     Specialized,
     Feedback,
-    Extension
-}
+    Pointer,
+    DynamicResource,
+    MeshOutput,
+};
+
+public enum ResourceShape
+{
+    ResourceBaseShapeMask = 0x0F,
+
+    ResourceNone = 0x00,
+
+    Texture1D = 0x01,
+    Texture2D = 0x02,
+    Texture3D = 0x03,
+    TextureCube = 0x04,
+    TextureBuffer = 0x05,
+
+    StructuredBuffer = 0x06,
+    ByteAddressBuffer = 0x07,
+    ResourceUnknown = 0x08,
+    AccelerationStructure = 0x09,
+    TextureSubpass = 0x0A,
+
+    ResourceExtShapeMask = 0x1F0,
+
+    TextureFeedbackFlag = 0x10,
+    TextureShadowFlag = 0x20,
+    TextureArrayFlag = 0x40,
+    TextureMultiSampleFlag = 0x80,
+    TextureCombinedFlag = 0x100,
+
+    Texture1DArray = Texture1D | TextureArrayFlag,
+    Texture2DArray = Texture2D | TextureArrayFlag,
+    TextureCubeArray = TextureCube | TextureArrayFlag,
+
+    Texture2DMultiSample = Texture2D | TextureMultiSampleFlag,
+    Texture2DMultiSampleArray =
+        Texture2D | TextureMultiSampleFlag | TextureArrayFlag,
+    TextureSubpassMultiSample = TextureSubpass | TextureMultiSampleFlag,
+};
 
 #endregion

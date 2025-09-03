@@ -155,10 +155,10 @@ namespace Slang.Sdk.Interop
             /// <summary>
             /// Gets the resource shape.
             /// </summary>
-            internal static int GetResourceShape(TypeReflectionHandle typeReflection, out string? error)
+            internal static ResourceShape GetResourceShape(TypeReflectionHandle typeReflection, out string? error)
             {
                 char* pError = null;
-                int result = SlangNativeInterop.TypeReflection_GetResourceShape(typeReflection, &pError);
+                ResourceShape result = (ResourceShape)SlangNativeInterop.TypeReflection_GetResourceShape(typeReflection, &pError);
                 error = Utf8StringMarshaller.ConvertToManaged((byte*)pError);
                 SlangNativeInterop.FreeChar(&pError);
                 return result;

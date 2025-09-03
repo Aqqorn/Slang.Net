@@ -92,12 +92,13 @@ namespace Slang.Sdk.Interop
                 {
                     output = new byte[outputSize];
                     Marshal.Copy((nint)pOutput, output, 0, outputSize);
+                    // Free the native buffer allocated by the native layer
+                    SlangNativeInterop.FreePointer(&pOutput);
                 }
                 else
                     output = null;
 
                 SlangNativeInterop.FreeChar(&pError);
-                //SlangNativeInterop.FreeChar(&pOutput);
 
                 return result;
             }

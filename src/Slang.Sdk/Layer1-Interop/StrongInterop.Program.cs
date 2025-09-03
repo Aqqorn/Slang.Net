@@ -25,7 +25,7 @@ namespace Slang.Sdk.Interop
             internal static void Release(ProgramHandle program, out string? error)
             {
                 char* pError = null;
-                SlangNativeInterop.Program_Release(program, &pError);
+                SlangNativeInterop.Program_Release(program.Handle, &pError);
                 error = Utf8StringMarshaller.ConvertToManaged((byte*)pError);
                 SlangNativeInterop.FreeChar(&pError);
             }
@@ -51,12 +51,13 @@ namespace Slang.Sdk.Interop
                 {
                     output = new byte[outputSize];
                     Marshal.Copy((nint)pOutput, output, 0, outputSize);
+                    // Free the native buffer allocated by the native layer
+                    SlangNativeInterop.FreePointer(&pOutput);
                 }
                 else
                     output = null;
 
                 SlangNativeInterop.FreeChar(&pError);
-                //SlangNativeInterop.FreeChar(&pOutput);
                 return result;
             }
 
@@ -82,12 +83,13 @@ namespace Slang.Sdk.Interop
                 {
                     output = new byte[outputSize];
                     Marshal.Copy((nint)pOutput, output, 0, outputSize);
+                    // Free the native buffer allocated by the native layer
+                    SlangNativeInterop.FreePointer(&pOutput);
                 }
                 else
                     output = null;
 
                 SlangNativeInterop.FreeChar(&pError);
-                //SlangNativeInterop.FreeChar(&pOutput);
 
                 return result;
             }

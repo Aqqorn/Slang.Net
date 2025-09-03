@@ -105,13 +105,13 @@ namespace Slang.Sdk.Binding
             return Call(() => StrongInterop.VariableLayoutReflection.GetSemanticName(Handle, out error), () => error);
         }
 
-        internal nuint GetSemanticIndex()
+        internal uint GetSemanticIndex()
         {
             string? error = null;
             return Call(() => StrongInterop.VariableLayoutReflection.GetSemanticIndex(Handle, out error), () => error);
         }
 
-        internal uint GetStage()
+        internal Stage GetStage()
         {
             string? error = null;
             return Call(() => StrongInterop.VariableLayoutReflection.GetStage(Handle, out error), () => error);

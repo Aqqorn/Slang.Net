@@ -81,7 +81,7 @@ namespace Slang.Sdk.Binding
             return new TypeReflection(this, Call(() => StrongInterop.TypeReflection.GetResourceResultType(Handle, out error), () => error));
         }
 
-        internal int GetResourceShape()
+        internal ResourceShape GetResourceShape()
         {
             string? error = null;
             return Call(() => StrongInterop.TypeReflection.GetResourceShape(Handle, out error), () => error);

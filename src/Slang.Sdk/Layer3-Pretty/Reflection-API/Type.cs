@@ -67,7 +67,7 @@ namespace Slang.Sdk
         public uint RowCount => Binding.GetRowCount();
         public uint ColumnCount => Binding.GetColumnCount();
         public ScalarType ScalarType => Binding.GetScalarType();
-        public int ResourceShape => Binding.GetResourceShape();
+        public ResourceShape ResourceShape => Binding.GetResourceShape();
         public int ResourceAccess => Binding.GetResourceAccess();
 
         public Type? ElementType => 
