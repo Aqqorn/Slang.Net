@@ -6,7 +6,7 @@
 		<Nullable>enable</Nullable>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<PackageId>Slang.Sdk</PackageId>
-		<PackageVersion>0.5.7</PackageVersion>
+		<PackageVersion>0.5.17</PackageVersion>
 		<Title>Slang.Sdk - .NET Bindings for the Slang Shader Language</Title>
 		<Description>A comprehensive .NET wrapper for the Slang Shader Language compiler, providing seamless integration of shader compilation and reflection capabilities into .NET applications.</Description>
 		<Authors>Aqqorn</Authors>
@@ -79,13 +79,13 @@
 
 	<!-- Platform-specific native dependencies for x64 -->
 	<ItemGroup>
-		<Content Include="..\Native\bin\$(Configuration)\x64\gfx.dll" Condition="Exists('..\Native\bin\$(Configuration)\x64\gfx.dll')">
+		<Content Include="..\Native\bin\$(Configuration)\x64\gfx.dll">
 			<Pack>true</Pack>
 			<PackagePath>runtimes\win-x64\native\gfx.dll</PackagePath>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<TargetPath>gfx.dll</TargetPath>
 		</Content>
-		<Content Include="..\Native\bin\$(Configuration)\x64\slang.dll" Condition="Exists('..\Native\bin\$(Configuration)\x64\slang.dll')">
+		<Content Include="..\Native\bin\$(Configuration)\x64\slang.dll">
 			<Pack>true</Pack>
 			<PackagePath>runtimes\win-x64\native\slang.dll</PackagePath>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -93,13 +93,13 @@
 		</Content>
 		
 		<!-- Work around: FIX for CLI spirV compile (Actually fix this in v0.9.0)-->
-		<Content Include="..\Native\bin\$(Configuration)\x64\slang-glslang.dll" Condition="Exists('..\Native\bin\$(Configuration)\x64\slang-glslang.dll')">
+		<Content Include="..\Native\bin\$(Configuration)\x64\slang-glslang.dll">
 			<Pack>true</Pack>
 			<PackagePath>runtimes\win-x64\native\slang-glslang.dll</PackagePath>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<TargetPath>slang-glslang.dll</TargetPath>
 		</Content>
-		<Content Include="..\Native\bin\$(Configuration)\x64\slang-glslang.dll" Condition="Exists('..\Native\bin\$(Configuration)\x64\slang-glslang.dll')">
+		<Content Include="..\Native\bin\$(Configuration)\x64\slang-glslang.dll">
 			<Pack>true</Pack>
 			<PackagePath>runtimes\win-x64\native\slang-glslang.dll</PackagePath>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -107,37 +107,37 @@
 		</Content>
 		<!-- Work around: FIX for CLI spirV compile (Actually fix this in v0.9.0)-->
 
-		<Content Include="..\Native\bin\$(Configuration)\x64\slang-glsl-module.dll" Condition="Exists('..\Native\bin\$(Configuration)\x64\slang-glsl-module.dll')">
+		<Content Include="..\Native\bin\$(Configuration)\x64\slang-glsl-module.dll">
 			<Pack>true</Pack>
 			<PackagePath>runtimes\win-x64\native\slang-glsl-module.dll</PackagePath>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<TargetPath>slang-glsl-module.dll</TargetPath>
 		</Content>
-		<Content Include="..\Native\bin\$(Configuration)\x64\slang-llvm.dll" Condition="Exists('..\Native\bin\$(Configuration)\x64\slang-llvm.dll')">
+		<Content Include="..\Native\bin\$(Configuration)\x64\slang-llvm.dll">
 			<Pack>true</Pack>
 			<PackagePath>runtimes\win-x64\native\slang-llvm.dll</PackagePath>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<TargetPath>slang-llvm.dll</TargetPath>
 		</Content>
-		<Content Include="..\Native\bin\$(Configuration)\x64\SlangNative.dll" Condition="Exists('..\Native\bin\$(Configuration)\x64\SlangNative.dll')">
+		<Content Include="..\Native\bin\$(Configuration)\x64\SlangNative.dll">
 			<Pack>true</Pack>
 			<PackagePath>runtimes\win-x64\native\SlangNative.dll</PackagePath>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<TargetPath>SlangNative.dll</TargetPath>
 		</Content>
-		<Content Include="..\Native\bin\$(Configuration)\x64\SlangNative.lib" Condition="Exists('..\Native\bin\$(Configuration)\x64\SlangNative.lib')">
+		<Content Include="..\Native\bin\$(Configuration)\x64\SlangNative.lib">
 			<Pack>true</Pack>
 			<PackagePath>runtimes\win-x64\native\SlangNative.lib</PackagePath>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<TargetPath>SlangNative.lib</TargetPath>
 		</Content>
-		<Content Include="..\Native\bin\$(Configuration)\x64\SlangNative.pdb" Condition="'$(Configuration)' == 'Debug' And Exists('..\Native\bin\$(Configuration)\x64\SlangNative.pdb')">
+		<Content Include="..\Native\bin\$(Configuration)\x64\SlangNative.pdb" Condition="'$(Configuration)' == 'Debug'">
 			<Pack>true</Pack>
 			<PackagePath>runtimes\win-x64\native\SlangNative.pdb</PackagePath>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<TargetPath>SlangNative.pdb</TargetPath>
 		</Content>
-		<Content Include="..\Native\bin\$(Configuration)\x64\slang-rt.dll" Condition="Exists('..\Native\bin\$(Configuration)\x64\slang-rt.dll')">
+		<Content Include="..\Native\bin\$(Configuration)\x64\slang-rt.dll">
 			<Pack>true</Pack>
 			<PackagePath>runtimes\win-x64\native\slang-rt.dll</PackagePath>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -145,31 +145,31 @@
 		</Content>
 		
 		<!-- slangc dependencies -->
-		<Content Include="..\Native\bin\$(Configuration)\x64\slangc.exe" Condition="Exists('..\Native\bin\$(Configuration)\x64\slangc.exe')">
+		<Content Include="..\Native\bin\$(Configuration)\x64\slangc.exe">
 			<Pack>true</Pack>
 			<PackagePath>runtimes\win-x64\native\slangc.exe</PackagePath>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<TargetPath>runtimes\win-x64\native\slangc.exe</TargetPath>
 		</Content>
-		<Content Include="..\Native\bin\$(Configuration)\x64\gfx.slang" Condition="Exists('..\Native\bin\$(Configuration)\x64\gfx.slang')">
+		<Content Include="..\Native\bin\$(Configuration)\x64\gfx.slang">
 			<Pack>true</Pack>
 			<PackagePath>runtimes\win-x64\native\gfx.slang</PackagePath>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<TargetPath>runtimes\win-x64\native\gfx.slang</TargetPath>
 		</Content>
-		<Content Include="..\Native\bin\$(Configuration)\x64\slang.slang" Condition="Exists('..\Native\bin\$(Configuration)\x64\slang.slang')">
+		<Content Include="..\Native\bin\$(Configuration)\x64\slang.slang">
 			<Pack>true</Pack>
 			<PackagePath>runtimes\win-x64\native\slang.slang</PackagePath>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<TargetPath>runtimes\win-x64\native\slang.slang</TargetPath>
 		</Content>
-		<Content Include="..\Native\bin\$(Configuration)\x64\slangd.exe" Condition="Exists('..\Native\bin\$(Configuration)\x64\slangd.exe')">
+		<Content Include="..\Native\bin\$(Configuration)\x64\slangd.exe">
 			<Pack>true</Pack>
 			<PackagePath>runtimes\win-x64\native\slangd.exe</PackagePath>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<TargetPath>runtimes\win-x64\native\slangd.exe</TargetPath>
 		</Content>
-		<Content Include="..\Native\bin\$(Configuration)\x64\slangi.exe" Condition="Exists('..\Native\bin\$(Configuration)\x64\slangi.exe')">
+		<Content Include="..\Native\bin\$(Configuration)\x64\slangi.exe">
 			<Pack>true</Pack>
 			<PackagePath>runtimes\win-x64\native\slangi.exe</PackagePath>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -179,13 +179,13 @@
 
 	<!-- Platform-specific native dependencies for ARM64 -->
 	<ItemGroup>
-		<Content Include="..\Native\bin\$(Configuration)\ARM64\gfx.dll" Condition="Exists('..\Native\bin\$(Configuration)\ARM64\gfx.dll')">
+		<Content Include="..\Native\bin\$(Configuration)\ARM64\gfx.dll">
 			<Pack>true</Pack>
 			<PackagePath>runtimes\win-ARM64\native\gfx.dll</PackagePath>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<TargetPath>gfx.dll</TargetPath>
 		</Content>
-		<Content Include="..\Native\bin\$(Configuration)\ARM64\slang.dll" Condition="Exists('..\Native\bin\$(Configuration)\ARM64\slang.dll')">
+		<Content Include="..\Native\bin\$(Configuration)\ARM64\slang.dll">
 			<Pack>true</Pack>
 			<PackagePath>runtimes\win-ARM64\native\slang.dll</PackagePath>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -193,13 +193,13 @@
 		</Content>
 
 		<!-- Work around: FIX for CLI spirV compile (Actually fix this in v0.9.0)-->
-		<Content Include="..\Native\bin\$(Configuration)\ARM64\slang-glslang.dll" Condition="Exists('..\Native\bin\$(Configuration)\ARM64\slang-glslang.dll')">
+		<Content Include="..\Native\bin\$(Configuration)\ARM64\slang-glslang.dll">
 			<Pack>true</Pack>
 			<PackagePath>runtimes\win-ARM64\native\slang-glslang.dll</PackagePath>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<TargetPath>slang-glslang.dll</TargetPath>
 		</Content>
-		<Content Include="..\Native\bin\$(Configuration)\ARM64\slang-glslang.dll" Condition="Exists('..\Native\bin\$(Configuration)\ARM64\slang-glslang.dll')">
+		<Content Include="..\Native\bin\$(Configuration)\ARM64\slang-glslang.dll">
 			<Pack>true</Pack>
 			<PackagePath>runtimes\win-ARM64\native\slang-glslang.dll</PackagePath>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -207,37 +207,38 @@
 		</Content>
 		<!-- Work around: FIX for CLI spirV compile (Actually fix this in v0.9.0)-->
 
-		<Content Include="..\Native\bin\$(Configuration)\ARM64\slang-glsl-module.dll" Condition="Exists('..\Native\bin\$(Configuration)\ARM64\slang-glsl-module.dll')">
+		<Content Include="..\Native\bin\$(Configuration)\ARM64\slang-glsl-module.dll">
 			<Pack>true</Pack>
 			<PackagePath>runtimes\win-ARM64\native\slang-glsl-module.dll</PackagePath>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<TargetPath>slang-glsl-module.dll</TargetPath>
 		</Content>
-		<Content Include="..\Native\bin\$(Configuration)\ARM64\slang-llvm.dll" Condition="Exists('..\Native\bin\$(Configuration)\ARM64\slang-llvm.dll')">
+		<!-- ARM64 does not get this dependency -->
+		<!--<Content Include="..\Native\bin\$(Configuration)\ARM64\slang-llvm.dll">
 			<Pack>true</Pack>
 			<PackagePath>runtimes\win-ARM64\native\slang-llvm.dll</PackagePath>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<TargetPath>slang-llvm.dll</TargetPath>
-		</Content>
-		<Content Include="..\Native\bin\$(Configuration)\ARM64\SlangNative.dll" Condition="Exists('..\Native\bin\$(Configuration)\ARM64\SlangNative.dll')">
+		</Content>-->
+		<Content Include="..\Native\bin\$(Configuration)\ARM64\SlangNative.dll">
 			<Pack>true</Pack>
 			<PackagePath>runtimes\win-ARM64\native\SlangNative.dll</PackagePath>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<TargetPath>SlangNative.dll</TargetPath>
 		</Content>
-		<Content Include="..\Native\bin\$(Configuration)\ARM64\SlangNative.lib" Condition="Exists('..\Native\bin\$(Configuration)\ARM64\SlangNative.lib')">
+		<Content Include="..\Native\bin\$(Configuration)\ARM64\SlangNative.lib">
 			<Pack>true</Pack>
 			<PackagePath>runtimes\win-ARM64\native\SlangNative.lib</PackagePath>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<TargetPath>SlangNative.lib</TargetPath>
 		</Content>
-		<Content Include="..\Native\bin\$(Configuration)\ARM64\SlangNative.pdb" Condition="'$(Configuration)' == 'Debug' And Exists('..\Native\bin\$(Configuration)\ARM64\SlangNative.pdb')">
+		<Content Include="..\Native\bin\$(Configuration)\ARM64\SlangNative.pdb" Condition="'$(Configuration)' == 'Debug'">
 			<Pack>true</Pack>
 			<PackagePath>runtimes\win-ARM64\native\SlangNative.pdb</PackagePath>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<TargetPath>SlangNative.pdb</TargetPath>
 		</Content>
-		<Content Include="..\Native\bin\$(Configuration)\ARM64\slang-rt.dll" Condition="Exists('..\Native\bin\$(Configuration)\ARM64\slang-rt.dll')">
+		<Content Include="..\Native\bin\$(Configuration)\ARM64\slang-rt.dll">
 			<Pack>true</Pack>
 			<PackagePath>runtimes\win-ARM64\native\slang-rt.dll</PackagePath>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -245,31 +246,31 @@
 		</Content>
 		
 		<!-- slangc dependencies -->
-		<Content Include="..\Native\bin\$(Configuration)\ARM64\slangc.exe" Condition="Exists('..\Native\bin\$(Configuration)\ARM64\slangc.exe')">
+		<Content Include="..\Native\bin\$(Configuration)\ARM64\slangc.exe">
 			<Pack>true</Pack>
 			<PackagePath>runtimes\win-ARM64\native\slangc.exe</PackagePath>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<TargetPath>runtimes\win-ARM64\native\slangc.exe</TargetPath>
 		</Content>
-		<Content Include="..\Native\bin\$(Configuration)\ARM64\gfx.slang" Condition="Exists('..\Native\bin\$(Configuration)\ARM64\gfx.slang')">
+		<Content Include="..\Native\bin\$(Configuration)\ARM64\gfx.slang">
 			<Pack>true</Pack>
 			<PackagePath>runtimes\win-ARM64\native\gfx.slang</PackagePath>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<TargetPath>runtimes\win-ARM64\native\gfx.slang</TargetPath>
 		</Content>
-		<Content Include="..\Native\bin\$(Configuration)\ARM64\slang.slang" Condition="Exists('..\Native\bin\$(Configuration)\ARM64\slang.slang')">
+		<Content Include="..\Native\bin\$(Configuration)\ARM64\slang.slang">
 			<Pack>true</Pack>
 			<PackagePath>runtimes\win-ARM64\native\slang.slang</PackagePath>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<TargetPath>runtimes\win-ARM64\native\slang.slang</TargetPath>
 		</Content>
-		<Content Include="..\Native\bin\$(Configuration)\ARM64\slangd.exe" Condition="Exists('..\Native\bin\$(Configuration)\ARM64\slangd.exe')">
+		<Content Include="..\Native\bin\$(Configuration)\ARM64\slangd.exe">
 			<Pack>true</Pack>
 			<PackagePath>runtimes\win-ARM64\native\slangd.exe</PackagePath>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<TargetPath>runtimes\win-ARM64\native\slangd.exe</TargetPath>
 		</Content>
-		<Content Include="..\Native\bin\$(Configuration)\ARM64\slangi.exe" Condition="Exists('..\Native\bin\$(Configuration)\ARM64\slangi.exe')">
+		<Content Include="..\Native\bin\$(Configuration)\ARM64\slangi.exe">
 			<Pack>true</Pack>
 			<PackagePath>runtimes\win-ARM64\native\slangi.exe</PackagePath>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>

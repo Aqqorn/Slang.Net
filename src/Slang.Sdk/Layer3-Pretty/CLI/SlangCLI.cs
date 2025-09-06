@@ -81,7 +81,7 @@ namespace Slang.Sdk
                             $"Directory exists: {Directory.Exists(Runtime.CLI_Directory)}\n"
                 };
             }
-            
+
             var startInfo = new ProcessStartInfo
             {
                 FileName = slangcPath,
@@ -90,7 +90,8 @@ namespace Slang.Sdk
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
-                CreateNoWindow = true
+                CreateNoWindow = true,
+                ErrorDialog = false,
             };
 
             using var process = new Process { StartInfo = startInfo };
