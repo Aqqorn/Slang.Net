@@ -9,7 +9,7 @@ param(
 )
 
 # Slang Sdk Version
-$slangVersion = "2025.13.2"
+$slangVersion = "2025.16.1"
 
 # Validate platform parameter
 $validPlatforms = @("x64", "ARM64")

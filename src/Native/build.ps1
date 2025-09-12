@@ -26,7 +26,7 @@ $nativeDir = $PSScriptRoot
 # STEP 1: Download Slang SDK if not already present
 Write-Host "Build SlangNative(STEP 1): Downloaded Slang SDK..." -ForegroundColor DarkBlue
 & "$nativeDir\download-slang-sdk.ps1" -SlangVersion $slangVersion -Platform $Platform
-
+ 
 #Copy the Slang SDK to the output directory
 $sdkPath = Join-Path $nativeDir "EmbeddedLLVM\slang-$slangVersion-windows\$Platform\bin\*.dll"
 $slangSdkOutputDir = Join-Path $nativeDir "bin\$Configuration\$Platform\"
@@ -54,6 +54,7 @@ Write-Host "Build SlangNative(STEP 2): MSBuild SlangNative project $Configuratio
 
 # MSBuild paths
 $msbuildPaths = @(
+    "${env:ProgramFiles}\Microsoft Visual Studio\18\Insiders\MSBuild\Current\Bin\MSBuild.exe",
     "${env:ProgramFiles}\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\MSBuild.exe",
     "${env:ProgramFiles}\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe",
     "${env:ProgramFiles}\Microsoft Visual Studio\2022\Professional\MSBuild\Current\Bin\MSBuild.exe",

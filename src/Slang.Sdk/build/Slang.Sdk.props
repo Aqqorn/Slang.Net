@@ -1,0 +1,7 @@
+<Project>
+  <PropertyGroup>
+    <SlangSdkPropsImported>true</SlangSdkPropsImported>
+    <!-- Enable copying of native dependencies for WinUI and other app models -->
+    <CopyLocalLockFileAssemblies Condition="'$(CopyLocalLockFileAssemblies)' == ''">true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+</Project>
