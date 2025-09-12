@@ -3,5 +3,15 @@
     <SlangSdkPropsImported>true</SlangSdkPropsImported>
     <!-- Enable copying of native dependencies for WinUI and other app models -->
     <CopyLocalLockFileAssemblies Condition="'$(CopyLocalLockFileAssemblies)' == ''">true</CopyLocalLockFileAssemblies>
+    <!-- Ensure runtime assets are resolved for consuming projects -->
+    <RestoreProjectStyle Condition="'$(RestoreProjectStyle)' == ''">PackageReference</RestoreProjectStyle>
+  </PropertyGroup>
+
+  <!-- Ensure proper runtime identifier resolution for WinUI projects -->
+  <PropertyGroup Condition="'$(UseWinUI)' == 'true' Or '$(WindowsPackageType)' == 'MSIX' Or '$(WindowsAppSDKBootstrapInitialize)' == 'true'">
+    <!-- Set runtime identifier based on platform if not already set -->
+    <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == '' And ('$(Platform)' == 'ARM64' Or '$(PlatformTarget)' == 'ARM64')">win-arm64</RuntimeIdentifier>
+    <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == '' And ('$(Platform)' == 'x64' Or '$(PlatformTarget)' == 'x64' Or ('$(Platform)' == 'AnyCPU' And '$(Prefer32Bit)' != 'true'))">win-x64</RuntimeIdentifier>
+    <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == '' And ('$(Platform)' == 'x86' Or '$(PlatformTarget)' == 'x86' Or '$(Prefer32Bit)' == 'true')">win-x86</RuntimeIdentifier>
   </PropertyGroup>
 </Project>

@@ -6,46 +6,91 @@
   <!-- Copy native dependencies to output directory for consuming projects -->
   <ItemGroup>
     <!-- x64 dependencies -->
-    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-x64\native\*.dll" Condition="'$(PlatformTarget)' == 'x64' Or '$(Platform)' == 'x64' Or ('$(PlatformTarget)' == 'AnyCPU' And '$(Prefer32Bit)' != 'true' And '$(Platform)' != 'x86')">
+    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-x64\native\*.dll" Condition="'$(PlatformTarget)' == 'x64' Or '$(Platform)' == 'x64' Or ('$(PlatformTarget)' == 'AnyCPU' And '$(Prefer32Bit)' != 'true' And '$(Platform)' != 'x86' And '$(Platform)' != 'ARM64')">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Visible>false</Visible>
     </Content>
-    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-x64\native\*.exe" Condition="'$(PlatformTarget)' == 'x64' Or '$(Platform)' == 'x64' Or ('$(PlatformTarget)' == 'AnyCPU' And '$(Prefer32Bit)' != 'true' And '$(Platform)' != 'x86')">
+    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-x64\native\*.exe" Condition="'$(PlatformTarget)' == 'x64' Or '$(Platform)' == 'x64' Or ('$(PlatformTarget)' == 'AnyCPU' And '$(Prefer32Bit)' != 'true' And '$(Platform)' != 'x86' And '$(Platform)' != 'ARM64')">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Visible>false</Visible>
     </Content>
-    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-x64\native\*.slang" Condition="'$(PlatformTarget)' == 'x64' Or '$(Platform)' == 'x64' Or ('$(PlatformTarget)' == 'AnyCPU' And '$(Prefer32Bit)' != 'true' And '$(Platform)' != 'x86')">
+    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-x64\native\*.slang" Condition="'$(PlatformTarget)' == 'x64' Or '$(Platform)' == 'x64' Or ('$(PlatformTarget)' == 'AnyCPU' And '$(Prefer32Bit)' != 'true' And '$(Platform)' != 'x86' And '$(Platform)' != 'ARM64')">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Visible>false</Visible>
     </Content>
     
     <!-- ARM64 dependencies -->
-    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-ARM64\native\*.dll" Condition="'$(PlatformTarget)' == 'ARM64' Or '$(Platform)' == 'ARM64'">
+    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-ARM64\native\*.dll" Condition="'$(PlatformTarget)' == 'ARM64' Or '$(Platform)' == 'ARM64' Or '$(RuntimeIdentifier)' == 'win-arm64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Visible>false</Visible>
     </Content>
-    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-ARM64\native\*.exe" Condition="'$(PlatformTarget)' == 'ARM64' Or '$(Platform)' == 'ARM64'">
+    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-ARM64\native\*.exe" Condition="'$(PlatformTarget)' == 'ARM64' Or '$(Platform)' == 'ARM64' Or '$(RuntimeIdentifier)' == 'win-arm64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Visible>false</Visible>
     </Content>
-    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-ARM64\native\*.slang" Condition="'$(PlatformTarget)' == 'ARM64' Or '$(Platform)' == 'ARM64'">
+    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-ARM64\native\*.slang" Condition="'$(PlatformTarget)' == 'ARM64' Or '$(Platform)' == 'ARM64' Or '$(RuntimeIdentifier)' == 'win-arm64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Visible>false</Visible>
     </Content>
   </ItemGroup>
 
-  <!-- Additional fallback for WinUI and other app models that might not follow standard platform detection -->
+  <!-- Additional fallback for WinUI and other app models -->
   <ItemGroup Condition="'$(UseWinUI)' == 'true' Or '$(WindowsPackageType)' == 'MSIX' Or '$(WindowsAppSDKBootstrapInitialize)' == 'true'">
     <!-- Default to x64 for WinUI applications if no specific platform is set -->
-    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-x64\native\*.dll" Condition="'$(Platform)' == '' Or '$(Platform)' == 'AnyCPU'">
+    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-x64\native\*.dll" Condition="('$(Platform)' == '' Or '$(Platform)' == 'AnyCPU') And '$(RuntimeIdentifier)' != 'win-arm64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Visible>false</Visible>
     </Content>
-    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-x64\native\*.exe" Condition="'$(Platform)' == '' Or '$(Platform)' == 'AnyCPU'">
+    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-x64\native\*.exe" Condition="('$(Platform)' == '' Or '$(Platform)' == 'AnyCPU') And '$(RuntimeIdentifier)' != 'win-arm64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Visible>false</Visible>
     </Content>
-    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-x64\native\*.slang" Condition="'$(Platform)' == '' Or '$(Platform)' == 'AnyCPU'">
+    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-x64\native\*.slang" Condition="('$(Platform)' == '' Or '$(Platform)' == 'AnyCPU') And '$(RuntimeIdentifier)' != 'win-arm64'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>false</Visible>
+    </Content>
+    
+    <!-- ARM64 for WinUI applications -->
+    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-ARM64\native\*.dll" Condition="'$(RuntimeIdentifier)' == 'win-arm64' Or '$(Platform)' == 'ARM64'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>false</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-ARM64\native\*.exe" Condition="'$(RuntimeIdentifier)' == 'win-arm64' Or '$(Platform)' == 'ARM64'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>false</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-ARM64\native\*.slang" Condition="'$(RuntimeIdentifier)' == 'win-arm64' Or '$(Platform)' == 'ARM64'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>false</Visible>
+    </Content>
+  </ItemGroup>
+
+  <!-- Special handling for transitive dependencies through class libraries -->
+  <ItemGroup Condition="'$(OutputType)' == 'WinExe' Or '$(OutputType)' == 'Exe' Or '$(UseWinUI)' == 'true'">
+    <!-- Copy x64 dependencies for executable projects -->
+    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-x64\native\*.dll" Condition="('$(Platform)' == 'x64' Or ('$(Platform)' == 'AnyCPU' And '$(RuntimeIdentifier)' != 'win-arm64' And '$(PlatformTarget)' != 'ARM64'))">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>false</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-x64\native\*.exe" Condition="('$(Platform)' == 'x64' Or ('$(Platform)' == 'AnyCPU' And '$(RuntimeIdentifier)' != 'win-arm64' And '$(PlatformTarget)' != 'ARM64'))">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>false</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-x64\native\*.slang" Condition="('$(Platform)' == 'x64' Or ('$(Platform)' == 'AnyCPU' And '$(RuntimeIdentifier)' != 'win-arm64' And '$(PlatformTarget)' != 'ARM64'))">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>false</Visible>
+    </Content>
+    
+    <!-- Copy ARM64 dependencies for executable projects -->
+    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-ARM64\native\*.dll" Condition="'$(Platform)' == 'ARM64' Or '$(RuntimeIdentifier)' == 'win-arm64' Or '$(PlatformTarget)' == 'ARM64'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>false</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-ARM64\native\*.exe" Condition="'$(Platform)' == 'ARM64' Or '$(RuntimeIdentifier)' == 'win-arm64' Or '$(PlatformTarget)' == 'ARM64'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>false</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-ARM64\native\*.slang" Condition="'$(Platform)' == 'ARM64' Or '$(RuntimeIdentifier)' == 'win-arm64' Or '$(PlatformTarget)' == 'ARM64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Visible>false</Visible>
     </Content>
