@@ -24,6 +24,9 @@
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	</PropertyGroup>
 
+	<!-- Import default targets explicitly -->
+	<Import Project="$(MSBuildSDKsPath)\Microsoft.NET.Sdk\Sdk.targets" />
+
 	<!-- Pre-build target to clear NuGet package cache for this specific package -->
 	<Target Name="ClearNuGetPackageCache" BeforeTargets="Build">
 		<Message Text="Clearing NuGet package cache for $(PackageId) v$(PackageVersion)..." Importance="high" />
@@ -64,8 +67,8 @@
 		</None>
 		
 		<!-- Include build props and targets files -->
-		<None Include="build\Slang.Sdk.props" Pack="true" PackagePath="build\Slang.Sdk.props" />
-		<None Include="build\Slang.Sdk.targets" Pack="true" PackagePath="build\Slang.Sdk.targets" />
+		<!--<None Include="build\Slang.Sdk.props" Pack="true" PackagePath="build\Slang.Sdk.props" />
+		<None Include="build\Slang.Sdk.targets" Pack="true" PackagePath="build\Slang.Sdk.targets" />-->
 		
 		<!-- Include buildTransitive targets file for transitive dependencies -->
 		<None Include="buildTransitive\Slang.Sdk.targets" Pack="true" PackagePath="buildTransitive\Slang.Sdk.targets" />
