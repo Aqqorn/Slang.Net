@@ -1460,7 +1460,7 @@ namespace SlangNative
 
 		try
 		{
-			return (int)((Native::TypeReflection*)typeReflection)->getResourceAccess();
+			return (int)((Native::TypeReflection*)typeReflection)->getResourceShape();
 		}
 		catch (const std::exception& e)
 		{
@@ -1475,7 +1475,7 @@ namespace SlangNative
 
 		try
 		{
-			return (int)((Native::TypeReflection*)typeReflection)->getResourceShape();
+			return (int)((Native::TypeReflection*)typeReflection)->getResourceAccess();
 		}
 		catch (const std::exception& e)
 		{
