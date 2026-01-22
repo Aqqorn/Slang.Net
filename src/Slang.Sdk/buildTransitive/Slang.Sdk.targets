@@ -4,52 +4,6 @@
     <SlangSdkBuildTransitiveImported>true</SlangSdkBuildTransitiveImported>
   </PropertyGroup>
 
-  <!-- Force copy of native dependencies when package is referenced transitively -->
-  <Target Name="SlangSdkCopyNativeDependencies" BeforeTargets="Build" Condition="'$(OutputType)' == 'WinExe' Or '$(OutputType)' == 'Exe' Or '$(UseWinUI)' == 'true'">
-    
-    <!-- Determine the correct runtime for the current build -->
-    <PropertyGroup>
-      <SlangRuntimeIdentifier Condition="'$(Platform)' == 'ARM64' Or '$(PlatformTarget)' == 'ARM64' Or '$(RuntimeIdentifier)' == 'win-arm64'">win-ARM64</SlangRuntimeIdentifier>
-      <SlangRuntimeIdentifier Condition="'$(SlangRuntimeIdentifier)' == '' And ('$(Platform)' == 'x64' Or '$(PlatformTarget)' == 'x64' Or ('$(Platform)' == 'AnyCPU' And '$(Prefer32Bit)' != 'true'))">win-x64</SlangRuntimeIdentifier>
-      <SlangRuntimeIdentifier Condition="'$(SlangRuntimeIdentifier)' == ''">win-x64</SlangRuntimeIdentifier>
-    </PropertyGroup>
-
-    <!-- Find native files to copy -->
-    <ItemGroup>
-      <SlangNativeFiles Include="$(MSBuildThisFileDirectory)..\runtimes\$(SlangRuntimeIdentifier)\native\*.*" />
-    </ItemGroup>
-
-    <!-- Copy the files -->
-    <Copy SourceFiles="@(SlangNativeFiles)" 
-          DestinationFolder="$(OutputPath)" 
-          SkipUnchangedFiles="true"
-          UseHardlinksIfPossible="false"
-          Condition="Exists('%(SlangNativeFiles.Identity)')" />
-
-    <Message Text="Slang.Sdk: Copied native dependencies for $(SlangRuntimeIdentifier) to $(OutputPath)" Importance="normal" />
-  </Target>
-
-  <!-- Ensure native dependencies are included in publish operations -->
-  <Target Name="SlangSdkIncludeNativeDependenciesInPublish" BeforeTargets="ComputeFilesToPublish" Condition="'$(OutputType)' == 'WinExe' Or '$(OutputType)' == 'Exe' Or '$(UseWinUI)' == 'true'">
-    
-    <!-- Determine the correct runtime for the current build -->
-    <PropertyGroup>
-      <SlangRuntimeIdentifier Condition="'$(Platform)' == 'ARM64' Or '$(PlatformTarget)' == 'ARM64' Or '$(RuntimeIdentifier)' == 'win-arm64'">win-ARM64</SlangRuntimeIdentifier>
-      <SlangRuntimeIdentifier Condition="'$(SlangRuntimeIdentifier)' == '' And ('$(Platform)' == 'x64' Or '$(PlatformTarget)' == 'x64' Or ('$(Platform)' == 'AnyCPU' And '$(Prefer32Bit)' != 'true'))">win-x64</SlangRuntimeIdentifier>
-      <SlangRuntimeIdentifier Condition="'$(SlangRuntimeIdentifier)' == ''">win-x64</SlangRuntimeIdentifier>
-    </PropertyGroup>
-
-    <!-- Find native files to include in publish -->
-    <ItemGroup>
-      <SlangNativeFilesToPublish Include="$(MSBuildThisFileDirectory)..\runtimes\$(SlangRuntimeIdentifier)\native\*.*" />
-    </ItemGroup>
-
-    <!-- Add to files to publish -->
-    <ItemGroup>
-      <ResolvedFileToPublish Include="@(SlangNativeFilesToPublish)">
-        <RelativePath>%(Filename)%(Extension)</RelativePath>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      </ResolvedFileToPublish>
-    </ItemGroup>
-  </Target>
+  <!-- Import the main targets file only if we're being used transitively -->
+  <Import Project="$(MSBuildThisFileDirectory)../build/Slang.Sdk.targets" Condition="'$(SlangSdkNativeTargetsImported)' != 'true'" />
 </Project>

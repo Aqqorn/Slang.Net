@@ -6,7 +6,7 @@
 		<Nullable>enable</Nullable>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<PackageId>Slang.Sdk</PackageId>
-		<PackageVersion>0.5.19</PackageVersion>
+		<PackageVersion>0.5.23</PackageVersion>
 		<Title>Slang.Sdk - .NET Bindings for the Slang Shader Language</Title>
 		<Description>A comprehensive .NET wrapper for the Slang Shader Language compiler, providing seamless integration of shader compilation and reflection capabilities into .NET applications.</Description>
 		<Authors>Aqqorn</Authors>
@@ -23,9 +23,6 @@
 		<OutputType Condition="'$(GeneratePackageOnBuild)' != 'True'">Exe</OutputType>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	</PropertyGroup>
-
-	<!-- Import default targets explicitly -->
-	<Import Project="$(MSBuildSDKsPath)\Microsoft.NET.Sdk\Sdk.targets" />
 
 	<!-- Pre-build target to clear NuGet package cache for this specific package -->
 	<Target Name="ClearNuGetPackageCache" BeforeTargets="Build">
@@ -67,8 +64,8 @@
 		</None>
 		
 		<!-- Include build props and targets files -->
-		<!--<None Include="build\Slang.Sdk.props" Pack="true" PackagePath="build\Slang.Sdk.props" />
-		<None Include="build\Slang.Sdk.targets" Pack="true" PackagePath="build\Slang.Sdk.targets" />-->
+		<None Include="build\Slang.Sdk.props" Pack="true" PackagePath="build\Slang.Sdk.props" />
+		<None Include="build\Slang.Sdk.targets" Pack="true" PackagePath="build\Slang.Sdk.targets" />
 		
 		<!-- Include buildTransitive targets file for transitive dependencies -->
 		<None Include="buildTransitive\Slang.Sdk.targets" Pack="true" PackagePath="buildTransitive\Slang.Sdk.targets" />
@@ -81,8 +78,8 @@
 		</None>
 	</ItemGroup>
 
-	<!-- Exclude test program from library builds -->
-	<ItemGroup Condition="'$(OutputType)' == 'Library'">
+	<!-- Exclude test program from package builds -->
+	<ItemGroup Condition="'$(GeneratePackageOnBuild)' == 'True'">
 		<Compile Remove="InteropTest.cs" />
 		<Compile Remove="BindingTests.cs" />
 		<Compile Remove="PrettyTests.cs" />
