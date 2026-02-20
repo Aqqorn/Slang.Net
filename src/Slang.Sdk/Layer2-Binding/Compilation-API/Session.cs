@@ -70,12 +70,64 @@ internal unsafe sealed class Session : CompilationBinding, IDisposable
         return new Module(this, Call(() => StrongInterop.Session.GetModuleByIndex(Handle, index, out error), () => error));
     }
 
+    internal Module LoadModuleFromSourceString(string moduleName, string modulePath, string sourceText)
+    {
+        if (string.IsNullOrWhiteSpace(moduleName))
+            throw new ArgumentException("Module name cannot be null or empty.", nameof(moduleName));
+        if (string.IsNullOrWhiteSpace(modulePath))
+            throw new ArgumentException("Module path cannot be null or empty.", nameof(modulePath));
+
+        return new Module(this, moduleName, modulePath, sourceText);
+    }
+
     internal static void EnableGlsl()
     {
         string? error = null;
         StrongInterop.GlobalSession.EnableGlsl(out error);
         if (error != null)
             throw new SlangException(SlangResult.Fail, $"Failed to enable GLSL support: {error}");
+    }
+
+    internal static int FindProfile(string profileName)
+    {
+        if (string.IsNullOrWhiteSpace(profileName))
+            throw new ArgumentException("Profile name cannot be null or empty.", nameof(profileName));
+
+        var result = StrongInterop.GlobalSession.FindProfile(profileName, out var error);
+        if (error != null)
+            throw new SlangException(SlangResult.Fail, $"Failed to find profile '{profileName}': {error}");
+
+        return result;
+    }
+
+    internal static int FindCapability(string capabilityName)
+    {
+        if (string.IsNullOrWhiteSpace(capabilityName))
+            throw new ArgumentException("Capability name cannot be null or empty.", nameof(capabilityName));
+
+        var result = StrongInterop.GlobalSession.FindCapability(capabilityName, out var error);
+        if (error != null)
+            throw new SlangException(SlangResult.Fail, $"Failed to find capability '{capabilityName}': {error}");
+
+        return result;
+    }
+
+    internal static SlangResult CheckCompileTargetSupport(Target.CompileTarget target)
+    {
+        var result = StrongInterop.GlobalSession.CheckCompileTargetSupport((int)target, out var error);
+        if (error != null)
+            throw new SlangException(SlangResult.Fail, $"Failed to probe compile target support for '{target}': {error}");
+
+        return result;
+    }
+
+    internal static SlangResult CheckPassThroughSupport(PassThrough passThrough)
+    {
+        var result = StrongInterop.GlobalSession.CheckPassThroughSupport((int)passThrough, out var error);
+        if (error != null)
+            throw new SlangException(SlangResult.Fail, $"Failed to probe pass-through support for '{passThrough}': {error}");
+
+        return result;
     }
 
     #region Disposable

@@ -62,6 +62,7 @@ namespace Native
 
 	private:
 		void initializeFromCompileRequest(SessionCLI* parent, CompileRequestCLI* compileRequest, unsigned int moduleIndex);
+		void initializeProgramComponentFromModule();
 
 		// parent should not be a ComPtr here, should be SessionCLI* instead
 		Slang::ComPtr<slang::ISession> m_parent;

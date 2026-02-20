@@ -38,11 +38,11 @@ Native::ModuleCLI::ModuleCLI(SessionCLI* parent, const char* moduleName, const c
 	// Create compile request
 	auto compileRequest = CompileRequestCLI(parent);
 	
-	// Add the shader file
-	compileRequest.addTranslationUnit(SLANG_SOURCE_LANGUAGE_SLANG, moduleName);
-	compileRequest.addTranslationUnitSourceFile(moduleIndex, modulePath);
+	// Add the shader source as an in-memory translation unit
+	int translationUnitIndex = compileRequest.addTranslationUnit(SLANG_SOURCE_LANGUAGE_SLANG, moduleName);
+	compileRequest.addTranslationUnitSourceString(translationUnitIndex, modulePath, shaderSource);
 
-	initializeFromCompileRequest(parent, &compileRequest, moduleIndex);
+	initializeFromCompileRequest(parent, &compileRequest, static_cast<unsigned int>(translationUnitIndex));
 	compileRequest.getNative()->getProgramWithEntryPoints(m_programComponent.writeRef());
 }
 
@@ -73,7 +73,8 @@ Native::ModuleCLI::ModuleCLI(SessionCLI* parent, const char* moduleName)
 	{
 		throw std::runtime_error("Failed to load module '" + std::string(moduleName) + "'. No diagnostics available.");
 	}
-	// TODO: programComponent
+
+	initializeProgramComponentFromModule();
 }
 
 Native::ModuleCLI::ModuleCLI(SessionCLI* parent, slang::IModule* nativeModule)
@@ -85,7 +86,7 @@ Native::ModuleCLI::ModuleCLI(SessionCLI* parent, slang::IModule* nativeModule)
 
 	m_parent = parent->getNative();
 	m_slangModule = nativeModule;
-	// TODO: programComponent
+	initializeProgramComponentFromModule();
 }
 
 Native::ModuleCLI::ModuleCLI(const ModuleCLI& other)
@@ -129,6 +130,57 @@ void Native::ModuleCLI::initializeFromCompileRequest(SessionCLI* parent, Compile
 	}
 
 	m_slangModule = slangModule;
+}
+
+void Native::ModuleCLI::initializeProgramComponentFromModule()
+{
+	if (!m_parent)
+		throw std::runtime_error("Parent session is not initialized.");
+	if (!m_slangModule)
+		throw std::runtime_error("Module is not initialized.");
+
+	const SlangInt definedEntryPointCount = m_slangModule->getDefinedEntryPointCount();
+
+	std::vector<Slang::ComPtr<slang::IEntryPoint>> entryPointRefs;
+	entryPointRefs.reserve(static_cast<size_t>(definedEntryPointCount));
+
+	std::vector<slang::IComponentType*> components;
+	components.reserve(static_cast<size_t>(definedEntryPointCount) + 1);
+	components.push_back(m_slangModule.get());
+
+	for (SlangInt i = 0; i < definedEntryPointCount; ++i)
+	{
+		Slang::ComPtr<slang::IEntryPoint> entryPoint;
+		SlangResult entryPointResult = m_slangModule->getDefinedEntryPoint(static_cast<SlangUInt>(i), entryPoint.writeRef());
+		if (SLANG_FAILED(entryPointResult) || !entryPoint)
+			throw std::runtime_error("Failed to retrieve module entry point at index " + std::to_string(i) + ".");
+
+		components.push_back(entryPoint.get());
+		entryPointRefs.push_back(entryPoint);
+	}
+
+	Slang::ComPtr<slang::IComponentType> composite;
+	Slang::ComPtr<slang::IBlob> diagnosticsBlob;
+	SlangResult composeResult = m_parent->createCompositeComponentType(
+		components.data(),
+		static_cast<SlangInt>(components.size()),
+		composite.writeRef(),
+		diagnosticsBlob.writeRef());
+
+	if (diagnosticsBlob && diagnosticsBlob->getBufferSize() > 0)
+		std::cout << (const char*)diagnosticsBlob->getBufferPointer() << std::endl;
+
+	if (SLANG_FAILED(composeResult) || !composite)
+		throw std::runtime_error("Failed to compose module component type.");
+
+	diagnosticsBlob = nullptr;
+	SlangResult linkResult = composite->link(m_programComponent.writeRef(), diagnosticsBlob.writeRef());
+
+	if (diagnosticsBlob && diagnosticsBlob->getBufferSize() > 0)
+		std::cout << (const char*)diagnosticsBlob->getBufferPointer() << std::endl;
+
+	if (SLANG_FAILED(linkResult) || !m_programComponent)
+		throw std::runtime_error("Failed to link module component type.");
 }
 
 const char* Native::ModuleCLI::getName()

@@ -31,6 +31,18 @@ namespace Slang.Sdk
                     throw new NotImplementedException("Disabling GLSL is not currently supported.");
             }
         }
+
+        public static int FindProfile(string profileName)
+            => global::Slang.Sdk.Binding.Session.FindProfile(profileName);
+
+        public static int FindCapability(string capabilityName)
+            => global::Slang.Sdk.Binding.Session.FindCapability(capabilityName);
+
+        public static SlangResult CheckCompileTargetSupport(Target.CompileTarget target)
+            => global::Slang.Sdk.Binding.Session.CheckCompileTargetSupport(target);
+
+        public static SlangResult CheckPassThroughSupport(PassThrough passThrough)
+            => global::Slang.Sdk.Binding.Session.CheckPassThroughSupport(passThrough);
         #endregion
 
         #region Pretty
@@ -47,7 +59,7 @@ namespace Slang.Sdk
                 throw new ArgumentException("Module name cannot be null or empty.", nameof(moduleName));
 
             if (!Binding.SearchPaths.Any())
-                throw new InvalidOperationException("");
+                throw new InvalidOperationException("No search paths configured for this session. Add at least one path with Session.Builder.AddSearchPath(...).");
 
             // Allows the users to either include or exclude the .slang extension
             moduleName = Path.GetFileNameWithoutExtension(moduleName);
@@ -97,7 +109,7 @@ namespace Slang.Sdk
                 throw new ArgumentException("Module path cannot be null or empty.", nameof(modulePath));
 
             if (!Binding.SearchPaths.Any())
-                throw new InvalidOperationException("");
+                throw new InvalidOperationException("No search paths configured for this session. Add at least one path with Session.Builder.AddSearchPath(...).");
 
             // Allows the users to either include or exclude the .slang extension
             moduleName = Path.GetFileNameWithoutExtension(moduleName);
@@ -110,6 +122,23 @@ namespace Slang.Sdk
                 throw new FileNotFoundException($"The specified slang file was not found: {modulePath}", modulePath);
 
             var result = new Module(this, moduleName, modulePath, moduleSource);
+            _ModulesList.Add(result);
+            return result;
+        }
+
+        public Module LoadModuleFromSourceString(string moduleName, string sourceText, string? modulePath = null)
+        {
+            if (string.IsNullOrWhiteSpace(moduleName))
+                throw new ArgumentException("Module name cannot be null or empty.", nameof(moduleName));
+            if (string.IsNullOrWhiteSpace(sourceText))
+                throw new ArgumentException("Source text cannot be null or empty.", nameof(sourceText));
+
+            // Keep extension-less import semantics while still feeding a stable virtual path to Slang diagnostics.
+            moduleName = Path.GetFileNameWithoutExtension(moduleName);
+            modulePath ??= $"{moduleName}.slang";
+
+            var bindingModule = Binding.LoadModuleFromSourceString(moduleName, modulePath, sourceText);
+            var result = new Module(this, bindingModule, moduleName);
             _ModulesList.Add(result);
             return result;
         }

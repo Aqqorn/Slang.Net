@@ -1,45 +1,36 @@
 # Building From Source
 
 ## Prerequisites
-- Visual Studio 2022 with C++/CLI support
+- Visual Studio 2022 with C++ toolchain
 - .NET 9.0 SDK
 - PowerShell
 
-## Build Process
+## Canonical Build Flow
 
-### Step 1: Building Native Dependencies
+### 1) Build Native (required first)
+From the repo root:
+
 ```powershell
-cd src\
-.\all-platforms.ps1 -Script Native\build.ps1
+cd src
+.\all-platforms.ps1 -script Native\build.ps1
 ```
 
-### Step 2: Building C++/CLI Wrapper
+This builds native outputs for supported Windows platforms.
+
+### 2) Build .NET project
+After native build succeeds, build the .NET project normally (solution or project build).
+
+Native changes are automatically included by the .NET project packaging/output pipeline.
+
+Examples:
+
 ```powershell
-cd src\
-.\all-platforms.ps1 -Script Slang.Net.CPP\build.ps1
+# from repo root
+dotnet build .\src\Slang.Sdk\Slang.Sdk.csproj -c Debug
+
+dotnet build .\src\Slang.Sdk\Slang.Sdk.csproj -c Release
 ```
 
-### Step 3: Building C# Wrapper
-```powershell
-cd src\
-.\all-platforms.ps1 -Script Slang.Net\build.ps1
-```
-
-### Step 4: Creating the NuGet Package
-
-Navigate to the source directory:
-```powershell
-cd src\
-```
-
-**For Debug:**
-```powershell
-dotnet pack .\Slang.Net --configuration Debug --verbosity normal --no-build
-```
-
-**For Release:**
-```powershell
-dotnet pack .\Slang.Net --configuration Release --verbosity normal --no-build
-```
-
-The NuGet package will be generated in the `Slang.Net\Builds\` subdirectories.
+## Notes
+- `Tests/AttributeMemoryLeakTest` is deprecated.
+- `Samples-Old` is deprecated/legacy content.

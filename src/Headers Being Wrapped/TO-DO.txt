@@ -1,0 +1,1 @@
+Make sure all native features are implemented in Slang.Net (as many of them are still missing), View the header files (in the include folder) to see what needs to be implemented. Delete this folder (Headers Being Wrapped) afterwards.

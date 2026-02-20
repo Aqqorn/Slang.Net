@@ -1,0 +1,43 @@
+name: CI - Build and Test
+
+on:
+  push:
+    branches: [ development, production, composer ]
+  pull_request:
+    branches: [ development, production ]
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+        with:
+          vs-version: 'latest'
+
+      - name: Build native dependencies
+        shell: pwsh
+        working-directory: src
+        run: .\all-platforms.ps1 -Script Native\build.ps1
+
+      - name: Build managed SDK
+        shell: pwsh
+        run: dotnet build .\src\Slang.Sdk\Slang.Sdk.csproj -c Debug
+
+      - name: Run smoke tests
+        shell: pwsh
+        run: dotnet test .\Tests\Slang.Sdk.Tests\Slang.Sdk.Tests.csproj -c Debug --filter "Category=Smoke"
+
+      - name: Run integration tests
+        shell: pwsh
+        run: dotnet test .\Tests\Slang.Sdk.Tests\Slang.Sdk.Tests.csproj -c Debug --filter "Category=Integration"

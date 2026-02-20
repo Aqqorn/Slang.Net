@@ -199,6 +199,26 @@ public enum SourceLanguage
     CountOf,
 };
 
+public enum PassThrough
+{
+    None,
+    Fxc,
+    Dxc,
+    Glslang,
+    SpirvDis,
+    Clang,
+    VisualStudio,
+    Gcc,
+    GenericCCpp,
+    Nvrtc,
+    Llvm,
+    SpirvOpt,
+    Metal,
+    Tint,
+    SpirvLink,
+    CountOf,
+}
+
 [StructLayout(LayoutKind.Sequential)]
 public unsafe struct CompilerOption
 {

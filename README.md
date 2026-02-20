@@ -97,6 +97,17 @@ Traditional HLSL/GLSL shaders have limitations that Slang addresses:
 | ❌ Manual resource binding | ✅ Automatic binding generation |
 | ❌ Platform-specific code | ✅ Cross-platform shader source |
 
+## Building From Source (Quick Start)
+
+```powershell
+cd src
+.\all-platforms.ps1 -script Native\build.ps1
+```
+
+Then build `src/Slang.Sdk/Slang.Sdk.csproj` (or the solution). Native build changes are automatically included.
+
+> Note: `Tests/AttributeMemoryLeakTest` is deprecated.
+
 ## Installation
 
 Install via NuGet Package Manager:

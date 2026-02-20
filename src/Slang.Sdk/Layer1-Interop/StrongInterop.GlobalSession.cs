@@ -25,6 +25,60 @@ namespace Slang.Sdk.Interop
 
                 SlangNativeInterop.FreeChar(&pError);
             }
+
+            internal static int FindProfile(string name, out string? error)
+            {
+                char* pError = null;
+                char* pName = (char*)Utf8StringMarshaller.ConvertToUnmanaged(name);
+
+                try
+                {
+                    int result = SlangNativeInterop.GlobalSession_FindProfile(pName, &pError);
+                    error = Utf8StringMarshaller.ConvertToManaged((byte*)pError);
+                    return result;
+                }
+                finally
+                {
+                    Utf8StringMarshaller.Free((byte*)pName);
+                    SlangNativeInterop.FreeChar(&pError);
+                }
+            }
+
+            internal static int FindCapability(string name, out string? error)
+            {
+                char* pError = null;
+                char* pName = (char*)Utf8StringMarshaller.ConvertToUnmanaged(name);
+
+                try
+                {
+                    int result = SlangNativeInterop.GlobalSession_FindCapability(pName, &pError);
+                    error = Utf8StringMarshaller.ConvertToManaged((byte*)pError);
+                    return result;
+                }
+                finally
+                {
+                    Utf8StringMarshaller.Free((byte*)pName);
+                    SlangNativeInterop.FreeChar(&pError);
+                }
+            }
+
+            internal static SlangResult CheckCompileTargetSupport(int target, out string? error)
+            {
+                char* pError = null;
+                SlangResult result = SlangNativeInterop.GlobalSession_CheckCompileTargetSupport(target, &pError);
+                error = Utf8StringMarshaller.ConvertToManaged((byte*)pError);
+                SlangNativeInterop.FreeChar(&pError);
+                return result;
+            }
+
+            internal static SlangResult CheckPassThroughSupport(int passThrough, out string? error)
+            {
+                char* pError = null;
+                SlangResult result = SlangNativeInterop.GlobalSession_CheckPassThroughSupport(passThrough, &pError);
+                error = Utf8StringMarshaller.ConvertToManaged((byte*)pError);
+                SlangNativeInterop.FreeChar(&pError);
+                return result;
+            }
         }
     }
 }

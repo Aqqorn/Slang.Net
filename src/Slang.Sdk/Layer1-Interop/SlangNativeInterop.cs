@@ -84,6 +84,18 @@ internal static unsafe partial class SlangNativeInterop
     #region Global Session API
     [LibraryImport(LibraryName)]
     internal static partial void GlobalSession_SetEnableGlsl([MarshalAs(UnmanagedType.U1)] bool value, char** error);
+
+    [LibraryImport(LibraryName)]
+    internal static partial int GlobalSession_FindProfile(char* name, char** error);
+
+    [LibraryImport(LibraryName)]
+    internal static partial int GlobalSession_FindCapability(char* name, char** error);
+
+    [LibraryImport(LibraryName)]
+    internal static partial SlangResult GlobalSession_CheckCompileTargetSupport(int target, char** error);
+
+    [LibraryImport(LibraryName)]
+    internal static partial SlangResult GlobalSession_CheckPassThroughSupport(int passThrough, char** error);
     #endregion
 
     #region Session API
