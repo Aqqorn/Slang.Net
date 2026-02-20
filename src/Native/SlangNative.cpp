@@ -79,6 +79,70 @@ namespace SlangNative
 		}
 	}
 
+	extern "C" SLANGNATIVE_API int GlobalSession_FindProfile(const char* name, const char** error)
+	{
+		if (!name)
+		{
+			*error = SetError("Argument Null: name");
+			return 0;
+		}
+
+		try
+		{
+			return static_cast<int>(Native::SessionCLI::GetGlobalSession()->findProfile(name));
+		}
+		catch (const std::exception& e)
+		{
+			*error = SetError(e.what());
+			return 0;
+		}
+	}
+
+	extern "C" SLANGNATIVE_API int GlobalSession_FindCapability(const char* name, const char** error)
+	{
+		if (!name)
+		{
+			*error = SetError("Argument Null: name");
+			return 0;
+		}
+
+		try
+		{
+			return static_cast<int>(Native::SessionCLI::GetGlobalSession()->findCapability(name));
+		}
+		catch (const std::exception& e)
+		{
+			*error = SetError(e.what());
+			return 0;
+		}
+	}
+
+	extern "C" SLANGNATIVE_API int32_t GlobalSession_CheckCompileTargetSupport(int target, const char** error)
+	{
+		try
+		{
+			return Native::SessionCLI::GetGlobalSession()->checkCompileTargetSupport(static_cast<SlangCompileTarget>(target));
+		}
+		catch (const std::exception& e)
+		{
+			*error = SetError(e.what());
+			return SLANG_FAIL;
+		}
+	}
+
+	extern "C" SLANGNATIVE_API int32_t GlobalSession_CheckPassThroughSupport(int passThrough, const char** error)
+	{
+		try
+		{
+			return Native::SessionCLI::GetGlobalSession()->checkPassThroughSupport(static_cast<SlangPassThrough>(passThrough));
+		}
+		catch (const std::exception& e)
+		{
+			*error = SetError(e.what());
+			return SLANG_FAIL;
+		}
+	}
+
 	// Session API
 	extern "C" SLANGNATIVE_API void* Session_Create(
 		void* options, int optionsLength,

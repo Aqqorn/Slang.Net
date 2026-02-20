@@ -453,5 +453,5 @@ Samples/**/bin/
 Samples/**/obj/
 
 # Exclude downloaded Slang SDK files
-src/Native/EmbeddedLLVM/
+#src/Native/EmbeddedLLVM/ we would like to include these files for reference,
 src/Native/EmbeddedLLVM/downloads/

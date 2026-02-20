@@ -9,8 +9,7 @@ namespace Slang
             get
             {
                 string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
-                string runtimeFolder = Path.Combine(appDirectory, "runtimes", GetRuntimeFolderName(GetRuntimeArchitecture(true)), "native");
-                return runtimeFolder;
+                return ResolveRuntimeDirectory(appDirectory, GetRuntimeArchitecture(true));
             }
         }
 
@@ -19,8 +18,7 @@ namespace Slang
             get
             {
                 string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
-                string runtimeFolder = Path.Combine(appDirectory, "runtimes", GetRuntimeFolderName(GetRuntimeArchitecture(false)), "native");
-                return runtimeFolder;
+                return ResolveRuntimeDirectory(appDirectory, GetRuntimeArchitecture(false));
             }
         }
 
@@ -34,6 +32,40 @@ namespace Slang
             return isCLI ? RuntimeInformation.OSArchitecture : RuntimeInformation.ProcessArchitecture;
         }
 
+        private static string ResolveRuntimeDirectory(string appDirectory, Architecture preferredArchitecture)
+        {
+            string preferredFolder = GetRuntimeFolderName(preferredArchitecture);
+            string preferredPath = Path.Combine(appDirectory, "runtimes", preferredFolder, "native");
+            if (Directory.Exists(preferredPath))
+                return preferredPath;
+
+            // Fallback order: try process architecture, then common Windows defaults
+            Architecture processArch = RuntimeInformation.ProcessArchitecture;
+            string processFolder = GetRuntimeFolderName(processArch);
+            string processPath = Path.Combine(appDirectory, "runtimes", processFolder, "native");
+            if (Directory.Exists(processPath))
+                return processPath;
+
+            string[] fallbacks = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+                ? new[] { "win-x64", "win-arm64", "win-x86" }
+                : RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
+                    ? new[] { "linux-x64", "linux-arm64" }
+                    : new[] { "osx-x64", "osx-arm64" };
+
+            foreach (var folder in fallbacks)
+            {
+                string candidate = Path.Combine(appDirectory, "runtimes", folder, "native");
+                if (Directory.Exists(candidate))
+                    return candidate;
+            }
+
+            // Project/local build layout may place native files directly in app base directory.
+            if (File.Exists(Path.Combine(appDirectory, "slangc.exe")) || File.Exists(Path.Combine(appDirectory, "SlangNative.dll")))
+                return appDirectory;
+
+            return preferredPath;
+        }
+
         private static string GetRuntimeFolderName(Architecture architecture)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -43,7 +75,7 @@ namespace Slang
                     Architecture.X64 => "win-x64",
                     Architecture.Arm64 => "win-arm64",
                     Architecture.X86 => "win-x86",
-                    _ => "win-x64" // Default fallback
+                    _ => "win-x64"
                 };
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
@@ -65,7 +97,7 @@ namespace Slang
                 };
             }
 
-            return "win-x64"; // Default fallback
+            return "win-x64";
         }
 
         private static string GetRuntime()

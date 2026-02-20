@@ -24,6 +24,10 @@ namespace SlangNative
 
     // Global Session
     extern "C" SLANGNATIVE_API void GlobalSession_SetEnableGlsl(bool value, const char** error);
+    extern "C" SLANGNATIVE_API int GlobalSession_FindProfile(const char* name, const char** error);
+    extern "C" SLANGNATIVE_API int GlobalSession_FindCapability(const char* name, const char** error);
+    extern "C" SLANGNATIVE_API int32_t GlobalSession_CheckCompileTargetSupport(int target, const char** error);
+    extern "C" SLANGNATIVE_API int32_t GlobalSession_CheckPassThroughSupport(int passThrough, const char** error);
 
     // Session API
     extern "C" SLANGNATIVE_API void* Session_Create(

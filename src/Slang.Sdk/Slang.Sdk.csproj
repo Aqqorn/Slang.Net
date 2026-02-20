@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net9.0</TargetFramework>
@@ -6,7 +6,7 @@
 		<Nullable>enable</Nullable>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<PackageId>Slang.Sdk</PackageId>
-		<PackageVersion>0.5.24</PackageVersion>
+		<PackageVersion>0.5.25</PackageVersion>
 		<Title>Slang.Sdk - .NET Bindings for the Slang Shader Language</Title>
 		<Description>A comprehensive .NET wrapper for the Slang Shader Language compiler, providing seamless integration of shader compilation and reflection capabilities into .NET applications.</Description>
 		<Authors>Aqqorn</Authors>
@@ -19,8 +19,7 @@
 		<RepositoryUrl>https://github.com/AlexanderSwain/Slang.Net.git</RepositoryUrl>
 		<PackageOutputPath>$(ProjectDir)Builds\$(Configuration)\</PackageOutputPath>
 		<OutputPath>$(ProjectDir)bin\$(Configuration)\</OutputPath>
-		<OutputType Condition="'$(GeneratePackageOnBuild)' == 'True'">Library</OutputType>
-		<OutputType Condition="'$(GeneratePackageOnBuild)' != 'True'">Exe</OutputType>
+		<OutputType>Library</OutputType>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	</PropertyGroup>
 
@@ -69,21 +68,11 @@
 		
 		<!-- Include buildTransitive targets file for transitive dependencies -->
 		<None Include="buildTransitive\Slang.Sdk.targets" Pack="true" PackagePath="buildTransitive\Slang.Sdk.targets" />
-		
-		<None Update="Tests\Shaders\AverageColor.slang">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="Tests\Shaders\ComponentAddition.slang">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
 	</ItemGroup>
 
-	<!-- Exclude test program from package builds -->
-	<ItemGroup Condition="'$(GeneratePackageOnBuild)' == 'True'">
-		<Compile Remove="InteropTest.cs" />
-		<Compile Remove="BindingTests.cs" />
-		<Compile Remove="PrettyTests.cs" />
-		<Compile Remove="Program.cs" />
+	<!-- Keep legacy in-project tests out of the production assembly -->
+	<ItemGroup>
+		<Compile Remove="Tests\**\*.cs" />
 	</ItemGroup>
 
 	<!-- Platform-specific native dependencies for x64 -->
@@ -303,3 +292,4 @@
 		</Content>
 	</ItemGroup>
 </Project>
+

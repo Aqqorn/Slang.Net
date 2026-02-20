@@ -43,7 +43,15 @@ namespace ReflectionAPI
             foreach (var param in reflection.Parameters.Where(p => p.Type.Kind == Slang.Sdk.Interop.TypeKind.ConstantBuffer))
             {
                 var layout = param.TypeLayout;
-                Console.WriteLine($"- {param.Name}: Size=<fix>, Alignment=<fix>");
+                var size = layout.GetSize(Slang.Sdk.Interop.ParameterCategory.Uniform);
+                if (size == 0)
+                    size = layout.GetSize(Slang.Sdk.Interop.ParameterCategory.ConstantBuffer);
+
+                var alignment = layout.GetAlignment(Slang.Sdk.Interop.ParameterCategory.Uniform);
+                if (alignment == 0)
+                    alignment = layout.GetAlignment(Slang.Sdk.Interop.ParameterCategory.ConstantBuffer);
+
+                Console.WriteLine($"- {param.Name}: Size={size}, Alignment={alignment}");
                 foreach (var field in layout.Fields)
                 {
                     Console.WriteLine($"    Field: {field.Name}, Type: {field.Type.Name}");
