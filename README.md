@@ -6,7 +6,7 @@ A comprehensive .NET wrapper for the Slang Shader Language Sdk, providing seamle
 Slang.Sdk Includes the following:
 - **Compilation API**
 - **Reflection API**
-- **[NEW] 'slangc' CLI API**
+- **'slangc' CLI API**
 
 > **Update:** Release roadmap is now live (please see below). This provides info on releases until v1.0.0.
 
