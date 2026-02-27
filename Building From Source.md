@@ -7,7 +7,8 @@
 
 ## Canonical Build Flow
 
-### 1) Build Native (required first)
+### 1) Building SlangNative 
+	-	This step can be skipped as Building Slang.Sdk automates this step
 From the repo root:
 
 ```powershell
@@ -17,8 +18,9 @@ cd src
 
 This builds native outputs for supported Windows platforms.
 
-### 2) Build .NET project
-After native build succeeds, build the .NET project normally (solution or project build).
+### 2) Building Slang.Sdk .NET project
+Build the .NET project normally (solution or project build). 
+- This will also build SlangNative if needed
 
 Native changes are automatically included by the .NET project packaging/output pipeline.
 

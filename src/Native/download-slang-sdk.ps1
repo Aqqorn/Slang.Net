@@ -33,6 +33,7 @@ if ((-Not (Test-Path $zipFile)) -or $Force) {
     Write-Host "Downloading Slang SDK $SlangVersion for Windows ($platformArg)..."
     try {
         $ProgressPreference = 'SilentlyContinue'
+	[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         Invoke-WebRequest -Uri $downloadUrl -OutFile $zipFile
         Write-Host "Download complete: $zipFile"
     }

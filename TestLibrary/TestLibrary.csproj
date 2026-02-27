@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Slang.Sdk" Version="0.5.24" />
+    <ProjectReference Include="..\src\Slang.Sdk\Slang.Sdk.csproj" />
   </ItemGroup>
 
 </Project>

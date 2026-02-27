@@ -48,7 +48,33 @@ foreach ($file in (Get-ChildItem $sdkBinPath -File)) {
     }
 }
 
+# STEP 2a: Ensure v143 build tools are installed
+Write-Host "Checking for Visual Studio v143 C++ build tools..." -ForegroundColor DarkBlue
 
+# Use vswhere to find Visual Studio installation
+$vsWherePath = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+if (-not (Test-Path $vsWherePath)) {
+    Write-Host "vswhere.exe not found. Please install Visual Studio Installer from https://visualstudio.microsoft.com/downloads/" -ForegroundColor Red
+    exit 1
+}
+
+# Check for v143 toolset component (MSVC v143)
+$vsInstallPath = & $vsWherePath -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+if (-not $vsInstallPath) {
+    Write-Host "Visual Studio with MSVC v143 build tools not found." -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "To install the v143 build tools, run the Visual Studio Installer and:" -ForegroundColor Yellow
+    Write-Host "  1. Modify your installation." -ForegroundColor Yellow
+    Write-Host "  2. Under 'Individual Components' tab, search for 'MSVC v143 - VS 2022 C++ x64/x86 build tools'." -ForegroundColor Yellow
+    Write-Host "  3. Check the box to install it." -ForegroundColor Yellow
+    Write-Host "  4. Apply the changes and wait for installation to complete." -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "Installer location (if installed):" -ForegroundColor Yellow
+    Write-Host "  ${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vs_installer.exe" -ForegroundColor Yellow
+    exit 1
+} else {
+    Write-Host "v143 C++ build tools detected at $vsInstallPath." -ForegroundColor Green
+}
 # STEP 2: Build SlangNative project for the specified platform
 Write-Host "Build SlangNative(STEP 2): MSBuild SlangNative project $Configuration|$Platform..." -ForegroundColor DarkBlue
 

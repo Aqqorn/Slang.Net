@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net9.0</TargetFramework>
@@ -26,31 +26,53 @@
 	<!-- Pre-build target to clear NuGet package cache for this specific package -->
 	<Target Name="ClearNuGetPackageCache" BeforeTargets="Build">
 		<Message Text="Clearing NuGet package cache for $(PackageId) v$(PackageVersion)..." Importance="high" />
-		
+
 		<!-- Get NuGet global packages folder path -->
 		<PropertyGroup>
 			<NuGetGlobalPackagesFolder>$([System.Environment]::GetFolderPath(SpecialFolder.UserProfile))\.nuget\packages</NuGetGlobalPackagesFolder>
 			<PackageCacheFolder>$(NuGetGlobalPackagesFolder)\$(PackageId.ToLowerInvariant())</PackageCacheFolder>
 		</PropertyGroup>
-		
+
 		<!-- Remove specific package folder if it exists -->
 		<RemoveDir Directories="$(PackageCacheFolder)" Condition="Exists('$(PackageCacheFolder)')" />
-		
+
 		<!-- Also clear from temp/http-cache for this package -->
 		<PropertyGroup>
 			<NuGetTempFolder>$([System.Environment]::GetEnvironmentVariable('TEMP'))\NuGetScratch</NuGetTempFolder>
 			<NuGetHttpCacheFolder>$([System.Environment]::GetFolderPath(SpecialFolder.LocalApplicationData))\NuGet\v3-cache</NuGetHttpCacheFolder>
 		</PropertyGroup>
-		
+
 		<ItemGroup>
 			<PackageTempFiles Include="$(NuGetTempFolder)\**\*$(PackageId)*" />
 			<PackageHttpCacheFiles Include="$(NuGetHttpCacheFolder)\**\*$(PackageId)*" />
 		</ItemGroup>
-		
+
 		<Delete Files="@(PackageTempFiles)" ContinueOnError="true" />
 		<Delete Files="@(PackageHttpCacheFiles)" ContinueOnError="true" />
-		
+
 		<Message Text="Cleared NuGet cache for $(PackageId) package." Importance="high" />
+	</Target>
+
+	<ItemGroup>
+		<NativeSources Include="..\Native\**\*.cpp" />
+		<NativeSources Include="..\Native\**\*.h" />
+		<NativeSources Include="..\Native\SlangNative.vcxproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<NativeOutputs Include="..\Native\bin\Debug\x64\SlangNative.dll" />
+		<NativeOutputs Include="..\Native\bin\Release\ARM64\SlangNative.dll" />
+	</ItemGroup>
+
+	<!-- Always-run target before Build -->
+	<Target Name="Build Native Dependencies" BeforeTargets="PreBuildEvent" Inputs="@(NativeSources)" Outputs="@(NativeOutputs)" >
+		<Message Text="Building Native Dependencies." Importance="high"/>
+
+		<Exec
+			Command="powershell -ExecutionPolicy Bypass -File all-platforms.ps1 -Script Native\build.ps1"
+			WorkingDirectory="..\"
+			StandardOutputImportance="High"
+			StandardErrorImportance="High"/>
 	</Target>
 
 	<!-- Include README.md and icon.png in package -->
@@ -61,11 +83,11 @@
 			<PackagePath>\</PackagePath>
 			<Pack>True</Pack>
 		</None>
-		
+
 		<!-- Include build props and targets files -->
 		<None Include="build\Slang.Sdk.props" Pack="true" PackagePath="build\Slang.Sdk.props" />
 		<None Include="build\Slang.Sdk.targets" Pack="true" PackagePath="build\Slang.Sdk.targets" />
-		
+
 		<!-- Include buildTransitive targets file for transitive dependencies -->
 		<None Include="buildTransitive\Slang.Sdk.targets" Pack="true" PackagePath="buildTransitive\Slang.Sdk.targets" />
 	</ItemGroup>
@@ -91,7 +113,7 @@
 			<TargetPath>slang.dll</TargetPath>
 			<Visible>false</Visible>
 		</Content>
-		
+
 		<!-- Work around: FIX for CLI spirV compile (Actually fix this in v0.9.0)-->
 		<Content Include="..\Native\bin\$(Configuration)\x64\slang-glslang.dll">
 			<Pack>true</Pack>
@@ -144,7 +166,7 @@
 			<TargetPath>slang-rt.dll</TargetPath>
 			<Visible>false</Visible>
 		</Content>
-		
+
 		<!-- slangc dependencies -->
 		<Content Include="..\Native\bin\$(Configuration)\x64\slangc.exe">
 			<Pack>true</Pack>
@@ -253,7 +275,7 @@
 			<TargetPath>slang-rt.dll</TargetPath>
 			<Visible>false</Visible>
 		</Content>
-		
+
 		<!-- slangc dependencies -->
 		<Content Include="..\Native\bin\$(Configuration)\ARM64\slangc.exe">
 			<Pack>true</Pack>
