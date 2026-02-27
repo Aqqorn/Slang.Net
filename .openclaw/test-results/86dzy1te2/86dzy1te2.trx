@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="815d19aa-a4e2-4cc0-8f6f-428fecfe5fbf" name="qanva@DESKTOP-28QQCJ3 2026-02-27 01:54:37" runUser="DESKTOP-28QQCJ3\qanva" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-02-27T01:54:37.6324241-06:00" queuing="2026-02-27T01:54:37.6324247-06:00" start="2026-02-27T01:54:28.7631349-06:00" finish="2026-02-27T01:54:37.6646193-06:00" />
+  <TestSettings name="default" id="9fe0e75c-51fb-4544-a622-73df8206f14c">
+    <Deployment runDeploymentRoot="qanva_DESKTOP-28QQCJ3_2026-02-27_01_54_37" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="0c92dfe9-a493-4dbe-823a-7c1c0527956f" testId="547ac4be-c2a2-b429-53e4-5cd1ae324db6" testName="Slang.Sdk.Tests.LifetimeRegressionTests.Session_Module_CreateDispose_Loop_ShouldRemainStable" computerName="DESKTOP-28QQCJ3" duration="00:00:01.7793455" startTime="2026-02-27T01:54:35.3420913-06:00" endTime="2026-02-27T01:54:37.0130015-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0c92dfe9-a493-4dbe-823a-7c1c0527956f">
+      <Output>
+        <ErrorInfo>
+          <Message>System.BadImageFormatException : An attempt was made to load a program with an incorrect format. (0x8007000B)</Message>
+          <StackTrace>   at System.Runtime.InteropServices.NativeLibrary.Load(String libraryPath)&#xD;
+   at Slang.Sdk.Interop.SlangNativeInterop.&lt;.cctor&gt;g__DllImportResolver|1_0(String libraryName, Assembly assembly, Nullable`1 searchPath) in C:\Users\qanva\.openclaw\workspace\source\Repos\Slang.Sdk\src\Slang.Sdk\Layer1-Interop\SlangNativeInterop.cs:line 30&#xD;
+   at System.Runtime.InteropServices.NativeLibrary.LoadLibraryCallbackStub(String libraryName, Assembly assembly, Boolean hasDllImportSearchPathFlags, UInt32 dllImportSearchPathFlags)&#xD;
+   at Slang.Sdk.Interop.SlangNativeInterop.FreeChar(Char** c)&#xD;
+   at Slang.Sdk.Interop.StrongInterop.Session.Create(Void* options, Int32 optionsLength, Void* macros, Int32 macrosLength, Void* models, Int32 modelsLength, String[] searchPaths, Int32 searchPathsLength, String&amp; error) in C:\Users\qanva\.openclaw\workspace\source\Repos\Slang.Sdk\src\Slang.Sdk\Layer1-Interop\StrongInterop.Session.cs:line 55&#xD;
+   at Slang.Sdk.Binding.Session..ctor(CompilerOption[] options, PreprocessorMacro[] macros, Target[] models, String[] searchPaths) in C:\Users\qanva\.openclaw\workspace\source\Repos\Slang.Sdk\src\Slang.Sdk\Layer2-Binding\Compilation-API\Session.cs:line 49&#xD;
+   at Slang.Sdk.Session..ctor(CompilerOption[] options, PreprocessorMacro[] macros, Target[] models, String[] searchPaths) in C:\Users\qanva\.openclaw\workspace\source\Repos\Slang.Sdk\src\Slang.Sdk\Layer3-Pretty\Compilation-API\Session.cs:line 18&#xD;
+   at Slang.Sdk.Session.Builder.Create() in C:\Users\qanva\.openclaw\workspace\source\Repos\Slang.Sdk\src\Slang.Sdk\Layer3-Pretty\Compilation-API\Session.Builder.cs:line 52&#xD;
+   at Slang.Sdk.Tests.LifetimeRegressionTests.Session_Module_CreateDispose_Loop_ShouldRemainStable() in C:\Users\qanva\.openclaw\workspace\source\Repos\Slang.Sdk\Tests\Slang.Sdk.Tests\LifetimeRegressionTests.cs:line 17&#xD;
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="Slang.Sdk.Tests.LifetimeRegressionTests.Session_Module_CreateDispose_Loop_ShouldRemainStable" storage="c:\users\qanva\.openclaw\workspace\source\repos\slang.sdk\tests\slang.sdk.tests\bin\debug\net9.0\slang.sdk.tests.dll" id="547ac4be-c2a2-b429-53e4-5cd1ae324db6">
+      <Execution id="0c92dfe9-a493-4dbe-823a-7c1c0527956f" />
+      <TestMethod codeBase="C:\Users\qanva\.openclaw\workspace\source\Repos\Slang.Sdk\Tests\Slang.Sdk.Tests\bin\Debug\net9.0\Slang.Sdk.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Slang.Sdk.Tests.LifetimeRegressionTests" name="Session_Module_CreateDispose_Loop_ShouldRemainStable" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="547ac4be-c2a2-b429-53e4-5cd1ae324db6" executionId="0c92dfe9-a493-4dbe-823a-7c1c0527956f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="1" executed="1" passed="0" failed="1" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.01] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 9.0.12)&#xD;
+[xUnit.net 00:00:00.76]   Discovering: Slang.Sdk.Tests&#xD;
+[xUnit.net 00:00:01.41]   Discovered:  Slang.Sdk.Tests&#xD;
+[xUnit.net 00:00:01.58]   Starting:    Slang.Sdk.Tests&#xD;
+[xUnit.net 00:00:03.64]       System.BadImageFormatException : An attempt was made to load a program with an incorrect format. (0x8007000B)&#xD;
+[xUnit.net 00:00:03.64]       Stack Trace:&#xD;
+[xUnit.net 00:00:03.65]            at System.Runtime.InteropServices.NativeLibrary.Load(String libraryPath)&#xD;
+[xUnit.net 00:00:03.65]         C:\Users\qanva\.openclaw\workspace\source\Repos\Slang.Sdk\src\Slang.Sdk\Layer1-Interop\SlangNativeInterop.cs(30,0): at Slang.Sdk.Interop.SlangNativeInterop.&lt;.cctor&gt;g__DllImportResolver|1_0(String libraryName, Assembly assembly, Nullable`1 searchPath)&#xD;
+[xUnit.net 00:00:03.65]            at System.Runtime.InteropServices.NativeLibrary.LoadLibraryCallbackStub(String libraryName, Assembly assembly, Boolean hasDllImportSearchPathFlags, UInt32 dllImportSearchPathFlags)&#xD;
+[xUnit.net 00:00:03.65]            at Slang.Sdk.Interop.SlangNativeInterop.FreeChar(Char** c)&#xD;
+[xUnit.net 00:00:03.65]         C:\Users\qanva\.openclaw\workspace\source\Repos\Slang.Sdk\src\Slang.Sdk\Layer1-Interop\StrongInterop.Session.cs(55,0): at Slang.Sdk.Interop.StrongInterop.Session.Create(Void* options, Int32 optionsLength, Void* macros, Int32 macrosLength, Void* models, Int32 modelsLength, String[] searchPaths, Int32 searchPathsLength, String&amp; error)&#xD;
+[xUnit.net 00:00:03.65]         C:\Users\qanva\.openclaw\workspace\source\Repos\Slang.Sdk\src\Slang.Sdk\Layer2-Binding\Compilation-API\Session.cs(49,0): at Slang.Sdk.Binding.Session..ctor(CompilerOption[] options, PreprocessorMacro[] macros, Target[] models, String[] searchPaths)&#xD;
+[xUnit.net 00:00:03.65]         C:\Users\qanva\.openclaw\workspace\source\Repos\Slang.Sdk\src\Slang.Sdk\Layer3-Pretty\Compilation-API\Session.cs(18,0): at Slang.Sdk.Session..ctor(CompilerOption[] options, PreprocessorMacro[] macros, Target[] models, String[] searchPaths)&#xD;
+[xUnit.net 00:00:03.65]         C:\Users\qanva\.openclaw\workspace\source\Repos\Slang.Sdk\src\Slang.Sdk\Layer3-Pretty\Compilation-API\Session.Builder.cs(52,0): at Slang.Sdk.Session.Builder.Create()&#xD;
+[xUnit.net 00:00:03.65]         C:\Users\qanva\.openclaw\workspace\source\Repos\Slang.Sdk\Tests\Slang.Sdk.Tests\LifetimeRegressionTests.cs(17,0): at Slang.Sdk.Tests.LifetimeRegressionTests.Session_Module_CreateDispose_Loop_ShouldRemainStable()&#xD;
+[xUnit.net 00:00:03.65]            at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)&#xD;
+[xUnit.net 00:00:03.65]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:03.73]   Finished:    Slang.Sdk.Tests&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="DESKTOP-28QQCJ3" outcome="Error" timestamp="2026-02-27T01:54:37.0343261-06:00">
+        <Text>[xUnit.net 00:00:03.64]     Slang.Sdk.Tests.LifetimeRegressionTests.Session_Module_CreateDispose_Loop_ShouldRemainStable [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>
